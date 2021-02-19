@@ -68,7 +68,7 @@
                             [ngStyle]="{'box-shadow': fileService.selectedFilePaths.has(file.fullPath) ? ('0 0 0 3px var(--' + fileService.selectingColor) + ')' : null }"
                             style="--card-b-width: 1px; --card-b-color: var(--b-fadest)"
                             (click)="fileService.selectFile(file)"
-                            *ngIf="file.fullPath | metadata | async as metadata"
+                            *ngIf="file | metadata | async as metadata"
                             [disabled]="!fileService.isAcceptedFile(metadata)">
                         <figure class="embedded flex c:center c:middle by:3x2"
                                 *ngIf="metadata.contentType.startsWith('image')">
@@ -113,7 +113,7 @@
                             <ng-container
                                           *ngIf="index < (fileService.page + 1) * 10">
                                 <tr class="touch"
-                                    *ngIf="file.fullPath | metadata | async as metadata"
+                                    *ngIf="file | metadata | async as metadata"
                                     [ngClass]="{'selected': fileService.selectedFilePaths.has(file.fullPath), 'disabled': !fileService.isAcceptedFile(metadata)}"
                                     (click)="fileService.selectFile(file)">
                                     <td class="pr:no fit">

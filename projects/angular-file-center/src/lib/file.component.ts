@@ -1,7 +1,6 @@
 import { Location } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { FileService } from './file.service';
 
 @Component({
@@ -14,7 +13,6 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(
         public route: ActivatedRoute,
         public fileService: FileService,
-        public translateService: TranslateService,
         public location: Location
     ) { }
 
@@ -23,7 +21,7 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
     localStorage = localStorage;
     subscription;
 
-    ngOnInit() {
+    async ngOnInit() {
         this.subscription = this.fileService
             .onDirectoryChanged
             .subscribe(async activatedRoute => {
@@ -37,12 +35,12 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (directoryPaths.length && activatedRoute === null)
                     return;
 
+                await this.fileService.list(directoryPaths.join('/'));
+
                 this.fileService.directoryPaths = directoryPaths;
-
-                await this.fileService.list(this.fileService.directoryPaths.join('/'));
             });
-
-        if (!this.fileService.target) {
+        
+        if (!this.fileService.target && !this.route.snapshot.firstChild) {
             this.fileService.onDirectoryChanged.next(null);
         }
     }

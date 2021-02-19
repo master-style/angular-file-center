@@ -358,13 +358,13 @@ export class FileService {
                                 .map(async (eachSizeName) => {
                                     const eachTask = cloneDeep(task);
                                     const eachSize = imageSizes[eachSizeName];
-                                    eachTask.artifact.url = this.sanitizer.bypassSecurityTrustUrl(artifact.url);
                                     eachTask.artifact = await convertImage(file, 'webp', {
                                         size: eachSize.value,
                                         quality: eachSize.quality || .5,
                                         image: artifact.image,
                                         square: eachSize.square
                                     });
+                                    eachTask.artifact.url = this.sanitizer.bypassSecurityTrustUrl(artifact.url);
                                     const fileExt = eachTask.artifact.blob.type.substring(eachTask.artifact.blob.type.lastIndexOf('/') + 1); // webp
                                     eachTask.path = this.currentPath
                                         + (path ? '/' + path : '')

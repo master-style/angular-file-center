@@ -7,7 +7,6 @@ import { ImageUrlPipe } from './shared/image-url.pipe';
 import { FileOptions, FileService, FILE_OPTIONS } from './file.service';
 import { TranslationPipe } from './shared/translation.pipe';
 import { MetadataPipe } from './shared/metadata.pipe';
-import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     declarations: [
@@ -18,7 +17,6 @@ import { TranslateModule } from '@ngx-translate/core';
     ],
     imports: [
         CommonModule,
-        TranslateModule,
         FileRoutingModule,
         NgxFilesizeModule
     ],
