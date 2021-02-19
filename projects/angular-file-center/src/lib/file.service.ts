@@ -148,7 +148,7 @@ export class FileService {
         this.accept = accept;
         this.targetKey = targetKey;
         this.multiple = multiple;
-        this.router.navigateByUrl(this.router.url + '/storage' + (directoryPath ? '/' + directoryPath : ''));
+        this.router.navigateByUrl(this.router.url + '/file' + (directoryPath ? '/' + directoryPath : ''));
     }
 
     reset() {
