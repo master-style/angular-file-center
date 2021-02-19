@@ -356,23 +356,24 @@ export class FileService {
                             const imageSizes = this.imageSizes;
                             await Promise.all(Object.keys(imageSizes)
                                 .map(async (eachSizeName) => {
+                                    const eachTask = cloneDeep(task);
                                     const eachSize = imageSizes[eachSizeName];
-                                    task.artifact.url = this.sanitizer.bypassSecurityTrustUrl(artifact.url);
-                                    task.artifact = await convertImage(file, 'webp', {
+                                    eachTask.artifact.url = this.sanitizer.bypassSecurityTrustUrl(artifact.url);
+                                    eachTask.artifact = await convertImage(file, 'webp', {
                                         size: eachSize.value,
                                         quality: eachSize.quality || .5,
                                         image: artifact.image,
                                         square: eachSize.square
                                     });
-                                    const fileExt = task.artifact.blob.type.substring(task.artifact.blob.type.lastIndexOf('/') + 1); // webp
-                                    task.path = this.currentPath
+                                    const fileExt = eachTask.artifact.blob.type.substring(eachTask.artifact.blob.type.lastIndexOf('/') + 1); // webp
+                                    eachTask.path = this.currentPath
                                         + (path ? '/' + path : '')
                                         + '/'
                                         + (eachSizeName === 'origin'
                                             ? ''
                                             : ('.@' + eachSizeName + '/'))
                                         + name + '.' + fileExt;
-                                    await this.addStorageTask(cloneDeep(task));
+                                    await this.addStorageTask(eachTask);
                                 })
                             );
                             break;

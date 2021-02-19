@@ -40,7 +40,7 @@ export function getHandlerFromFirebaseStorage(storage) {
         },
         upload: (task: any) => {
             return new Promise(resolve => {
-                const storageTask = this.clientService.storage.ref(task.path).put(task.artifact.blob);
+                const storageTask = storage.ref(task.path).put(task.artifact.blob);
 
                 storageTask.on('state_changed', (snapshot) => {
                     // Observe state change events such as progress, pause, and resume
