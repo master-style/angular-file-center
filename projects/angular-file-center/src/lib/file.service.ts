@@ -117,10 +117,6 @@ export class FileService {
         return this.directoryPaths.join('/');
     }
 
-    get currentDirectory() {
-        return this.directoryPaths[this.directoryPaths.length - 1];
-    }
-
     getBreadcrumbTranslation(directoryPath: string) {
         const index = this.directoryPaths.indexOf(directoryPath);
 
@@ -249,7 +245,7 @@ export class FileService {
                 if (data.valid) {
                     return new Promise(async (resolve) => {
                         await this.handler.createFolder(this.currentPath ? this.currentPath + '/' : '', data.value['folder-name'])
-                        await this.list(this.currentDirectory);
+                        await this.list(this.currentPath);
                         resolve(true);
                     });
                 } else {
