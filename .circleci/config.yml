@@ -1,0 +1,27 @@
+version: 2
+
+workflows:
+  version: 2
+  package:
+    jobs:
+      - pack & release:
+          context: Master
+
+jobs:
+  pack & release:
+    docker:
+      - image: 'circleci/node:latest'
+    steps:
+      - checkout
+      - run:
+          name: install
+          command: npm i
+      - run:
+          name: build package
+          command: npm run build
+      - run:
+          name: install semantic release
+          command: cd dist/angular-file-center && npm i -D semantic-release @semantic-release/github
+      - run:
+          name: semantic release
+          command: cd dist/angular-file-center && npx semantic-release || true

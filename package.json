@@ -1,14 +1,13 @@
 {
-  "name": "angular-file-center",
+  "name": "@master/angular-file-center",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "~11.2.1",
     "@angular/common": "~11.2.1",
@@ -23,6 +22,7 @@
     "zone.js": "~0.11.3"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "~0.1102.1",
     "@angular/cli": "~11.2.1",
     "@angular/compiler-cli": "~11.2.1",
     "@types/jasmine": "~3.6.0",
@@ -35,6 +35,7 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "ng-packagr": "^11.0.0",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
