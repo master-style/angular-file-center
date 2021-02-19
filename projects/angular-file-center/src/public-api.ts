@@ -9,6 +9,7 @@ export * from './lib/file.component';
 export * from './lib/directory/directory-routing.module';
 export * from './lib/directory/directory.component';
 export * from './lib/directory/directory.module';
+export * from './lib/shared/get-handler-from-firebase-storage';
 export * from './lib/shared/convert-image';
 export * from './lib/shared/image-url.pipe';
 export * from './lib/shared/is-accepted-file';
