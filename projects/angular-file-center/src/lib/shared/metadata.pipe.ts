@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FileService, MetadataResult } from '../file.service';
+import { FileService, IFile, MetadataResult } from '../file.service';
 
 @Pipe({
     name: 'metadata'
@@ -10,7 +10,7 @@ export class MetadataPipe implements PipeTransform {
         private fileService: FileService
     ) { }
 
-    transform(fullPath: string): Promise<MetadataResult> {
-        return this.fileService.handler.getMetadata(fullPath);
+    transform(file: IFile): Promise<MetadataResult> {
+        return this.fileService.handler.getMetadata(file);
     }
 }
