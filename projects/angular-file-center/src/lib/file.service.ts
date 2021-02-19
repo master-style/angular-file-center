@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { SafeUrl } from '@angular/platform-browser';
 import merge from 'lodash-es/merge';
@@ -13,22 +13,27 @@ import { loadImageFromFile } from './shared/load-image-from-file';
 import { isAcceptedFile } from './shared/is-accepted-file';
 import { dialog } from '@master/ui';
 
+export interface IFolder {
+    name: string,
+    source: any
+}
+
+export interface IFile {
+    name: string,
+    fullPath: string,
+    source: any
+}
+
 export interface ListResult {
-    folders: {
-        name: string,
-        source: any
-    }[],
-    files: {
-        name: string,
-        fullPath: string,
-        source: any
-    }[]
+    folders: IFolder[],
+    files: IFile[]
 }
 
 export interface MetadataResult {
-    contentType;
-    size;
-    timeCreated;
+    name: string;
+    contentType: string;
+    size: number;
+    timeCreated: Date;
 }
 
 const DEFAULT_OPTIONS = {
@@ -43,11 +48,11 @@ const DEFAULT_OPTIONS = {
 export interface Handler {
     list: (directoryPath?: string) => Promise<ListResult> | ListResult,
     createFolder: (currentPath: string, name: string) => Promise<void> | void,
-    deleteFolder: (directory) => Promise<void> | void,
+    deleteFolder: (folder: IFolder) => Promise<void> | void,
     deleteFile: (filePath: string) => Promise<void>,
     upload: (task: Task) => Promise<void> | void,
     getDownloadURL: (filePath: string) => Promise<string>,
-    getMetadata: (filePath: string) => Promise<MetadataResult>
+    getMetadata: (file: IFile) => Promise<MetadataResult>
 }
 
 export interface FileOptions {
@@ -90,7 +95,7 @@ export class FileService {
     accept = '';
     multiple = false;
     selectingColor = 'blue';
-    onDirectoryChanged: BehaviorSubject<ActivatedRoute> = new BehaviorSubject(null);
+    onDirectoryChanged = new Subject<ActivatedRoute>();
 
     page = 0;
     files = [];
@@ -417,13 +422,13 @@ export class FileService {
 
     async go(defaultRoute, directoryPath?) {
         const index = this.directoryPaths.indexOf(directoryPath);
-        this.directoryPaths = index === -1
+        const temp = index === -1
             ? []
             : this.directoryPaths.slice(0, index + 1);
 
         this.router.navigate(
-            this.directoryPaths.length
-                ? ['./', ...this.directoryPaths]
+            temp.length
+                ? ['./', ...temp]
                 : ['./'],
             { relativeTo: defaultRoute }
         );
