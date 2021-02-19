@@ -3,7 +3,7 @@ import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import merge from 'lodash-es/merge';
 
 import { convertImage } from './shared/convert-image';
@@ -82,7 +82,8 @@ export class FileService {
     constructor(
         private location: Location,
         private router: Router,
-        @Inject(FILE_OPTIONS) public options: FileOptions
+        @Inject(FILE_OPTIONS) public options: FileOptions,
+        private sanitizer: DomSanitizer
     ) { 
         this.options = merge(DEFAULT_OPTIONS, options);
     }
@@ -356,7 +357,7 @@ export class FileService {
                             await Promise.all(Object.keys(imageSizes)
                                 .map(async (eachSizeName) => {
                                     const eachSize = imageSizes[eachSizeName];
-                                    task.artifact.url = artifact.url;
+                                    task.artifact.url = this.sanitizer.bypassSecurityTrustUrl(artifact.url);
                                     task.artifact = await convertImage(file, 'webp', {
                                         size: eachSize.value,
                                         quality: eachSize.quality || .5,

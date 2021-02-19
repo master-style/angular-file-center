@@ -9,6 +9,6 @@ export async function loadImageFromFile(file: File) {
     });
     return {
         image,
-        url: this.sanitizer.bypassSecurityTrustUrl(url)
+        url
     };
 }
