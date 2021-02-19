@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AngularFileCenterComponent } from './angular-file-center.component';
+import { DirectoryComponent } from './directory.component';
 
-describe('AngularFileCenterComponent', () => {
-  let component: AngularFileCenterComponent;
-  let fixture: ComponentFixture<AngularFileCenterComponent>;
+describe('DirectoryComponent', () => {
+  let component: DirectoryComponent;
+  let fixture: ComponentFixture<DirectoryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AngularFileCenterComponent ]
+      declarations: [ DirectoryComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AngularFileCenterComponent);
+    fixture = TestBed.createComponent(DirectoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

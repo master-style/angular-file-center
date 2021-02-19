@@ -1,0 +1,17 @@
+m-modal::part(overlay) {
+    backdrop-filter: blur(3px) saturate(0);
+}
+
+m-card {
+    --card-b-width: 1px;
+    --card-b-color: var(--bg-color);
+}
+
+tr.selected {
+    background: linear-gradient(90deg, rgba(var(--theme-fade-rgb), 0) 0%, rgba(var(--theme-fade-rgb), 1) 3rem, rgba(var(--theme-fade-rgb), 1) calc(100% - 3rem), rgba(var(--theme-fade-rgb), 0) 100%);
+}
+
+tr.disabled {
+    pointer-events: none!important;
+    opacity: .5;
+}
