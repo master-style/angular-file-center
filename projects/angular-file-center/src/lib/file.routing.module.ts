@@ -7,7 +7,6 @@ const routes: Routes = [
     {
         path: '',
         component: FileComponent,
-        canActivate: [FileService],
         children: [
             {
                 path: ':id',

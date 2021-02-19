@@ -156,16 +156,6 @@ export class FileService {
         this.multiple = true;
     }
 
-    canActivate(): boolean {
-        // if (!this.target) {
-        //     this.location.back();
-        //     this.reset();
-        //     return false;
-        // } 
-
-        return true;
-    }
-
     async list(directoryPath?) {
         this.querying = true;
 

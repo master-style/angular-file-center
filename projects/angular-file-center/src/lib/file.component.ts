@@ -29,18 +29,22 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe(async activatedRoute => {
                 this.fileService.directoryRoute = activatedRoute;
 
-                const temp = [];
+                const directoryPaths = [];
                 for (let nowRoute = activatedRoute; nowRoute && nowRoute !== this.route; nowRoute = nowRoute.parent.parent) {
-                    temp.unshift(decodeURIComponent(nowRoute.params['_value']['id']));
+                    directoryPaths.unshift(decodeURIComponent(nowRoute.params['_value']['id']));
                 }
 
-                if (temp.length && activatedRoute === null)
+                if (directoryPaths.length && activatedRoute === null)
                     return;
 
-                this.fileService.directoryPaths = temp;
+                this.fileService.directoryPaths = directoryPaths;
 
                 await this.fileService.list(this.fileService.directoryPaths.join('/'));
             });
+
+        if (!this.fileService.target) {
+            this.fileService.onDirectoryChanged.next(null);
+        }
     }
 
     ngAfterViewInit(): void {
@@ -49,6 +53,11 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
+
+        this.fileService.target = undefined;
+        this.fileService.accept = undefined;
+        this.fileService.targetKey = undefined;
+        this.fileService.multiple = undefined;
     }
 
     async apply() {
