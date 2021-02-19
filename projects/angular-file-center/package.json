@@ -17,7 +17,7 @@
     },
     "dependencies": {
         "lodash-es": "^4.17.20",
-        "@master/ui": "~1.0.0",
+        "@master/ui": "~1.0.0-alpha.3",
         "@ngx-translate/core": "^13.0.0",
         "ngx-filesize": "^2.0.16",
         "tslib": "^2.0.0"
