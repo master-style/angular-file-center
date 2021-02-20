@@ -52,7 +52,9 @@ export interface Handler {
     createFolder: (currentPath: string, name: string) => Promise<void>,
     deleteFolder: (folder: IFolder) => Promise<void>,
     deleteFile: (filePath: string) => Promise<void>,
+    onUpload: () => Promise<void>,
     upload: (task: Task) => Promise<void>,
+    onUploaded: () => Promise<void>,
     getDownloadURL: (filePath: string) => Promise<string>,
     getMetadata: (file: IFile) => Promise<MetadataResult>
 }
@@ -328,17 +330,7 @@ export class FileService {
     async upload(event) {
         const files = event.target.files;
 
-        const popup: any = document.getElementById('storage-task-popup');
-        const popupTrigger = document.querySelector('[toggle-popup="#storage-task-popup"]');
-
-        popup.trigger = popupTrigger;
-
-        requestAnimationFrame(async () => {
-            const closeOn = popup.closeOn;
-            popup.closeOn = 'click:outside';
-            await popup.open();
-            popup.closeOn = closeOn;
-        });
+        await this.handler.onUpload?.();
 
         await Promise.all(
             Array.from(files)
@@ -390,6 +382,8 @@ export class FileService {
                     }
                 })
         );
+
+        await this.handler.onUploaded?.();
 
         await this.list(this.directoryPaths.join('/'));
     }
