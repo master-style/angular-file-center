@@ -51,7 +51,7 @@ export interface Handler {
     deleteFolder: (folder: IFolder) => Promise<void> | void,
     deleteFile: (filePath: string) => Promise<void>,
     upload: (task: Task) => Promise<void> | void,
-    getDownloadURL: (filePath: string) => Promise<string>,
+    getDownloadURL: (filePath: string) => Promise<string> | string,
     getMetadata: (file: IFile) => Promise<MetadataResult>
 }
 

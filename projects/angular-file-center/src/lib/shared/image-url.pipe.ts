@@ -17,6 +17,6 @@ export class ImageUrlPipe implements PipeTransform {
         if (sizeName) {
             fullPath = dirPath + '/.@' + sizeName + '/' + fileName;
         }
-        return this.fileService.handler.getDownloadURL(fullPath);
+        return this.fileService.handler.getDownloadURL(fullPath) as Promise<string>;
     }
 }
