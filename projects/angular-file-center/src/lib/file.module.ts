@@ -3,17 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FileComponent } from './file.component';
 import { FileRoutingModule } from './file.routing.module';
 import { NgxFilesizeModule } from 'ngx-filesize';
-import { ImageUrlPipe } from './shared/image-url.pipe';
+import { FileUrlPipe } from './shared/file-url.pipe';
 import { FileOptions, FileService, FILE_OPTIONS } from './file.service';
 import { TranslationPipe } from './shared/translation.pipe';
-import { MetadataPipe } from './shared/metadata.pipe';
+import { FileMetadataPipe } from './shared/file-metadata.pipe';
 
 @NgModule({
     declarations: [
         FileComponent,
-        ImageUrlPipe,
+        FileUrlPipe,
         TranslationPipe,
-        MetadataPipe
+        FileMetadataPipe
     ],
     imports: [
         CommonModule,
@@ -22,7 +22,8 @@ import { MetadataPipe } from './shared/metadata.pipe';
     ],
     exports: [
         CommonModule,
-        ImageUrlPipe
+        FileUrlPipe,
+        FileMetadataPipe
     ],
     schemas: [
         CUSTOM_ELEMENTS_SCHEMA

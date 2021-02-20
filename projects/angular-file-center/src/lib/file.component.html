@@ -77,10 +77,10 @@
                 <ng-container
                               *ngIf="index < (fileService.page + 1) * 10">
                     <m-card type="button" class="x:6 x:2.4@sm theme"
-                            [ngStyle]="{'box-shadow': fileService.selectedFilePaths.has(file.fullPath) ? ('0 0 0 3px var(--' + fileService.selectingColor) + ')' : null }"
+                            [ngStyle]="{'box-shadow': fileService.selectedFilePaths.has(file.path) ? ('0 0 0 3px var(--' + fileService.selectingColor) + ')' : null }"
                             style="--card-b-width: 1px; --card-b-color: var(--b-fadest)"
                             (click)="fileService.selectFile(file)"
-                            *ngIf="file | metadata | async as metadata"
+                            *ngIf="file.path | fileMetadata | async as metadata"
                             [disabled]="!fileService.isAcceptedFile(metadata)">
                         <figure class="embedded flex c:center c:middle by:3x2"
                                 *ngIf="metadata.contentType.startsWith('image')">
@@ -88,7 +88,7 @@
                                  decoding="async"
                                  loading="lazy"
                                  [ngClass]="{'invisible': !image}"
-                                 *ngIf="(file.fullPath | imageUrl: 'sm' | async) as image; else imageSpinner">
+                                 *ngIf="(file.path | fileUrl: 'sm' | async) as image; else imageSpinner">
                             <ng-template #imageSpinner>
                                 <m-icon name="spinner" class="f:md"></m-icon>
                             </ng-template>
@@ -125,8 +125,8 @@
                             <ng-container
                                           *ngIf="index < (fileService.page + 1) * 10">
                                 <tr class="touch"
-                                    *ngIf="file | metadata | async as metadata"
-                                    [ngClass]="{'selected': fileService.selectedFilePaths.has(file.fullPath), 'disabled': !fileService.isAcceptedFile(metadata)}"
+                                    *ngIf="file.path | fileMetadata | async as metadata"
+                                    [ngClass]="{'selected': fileService.selectedFilePaths.has(file.path), 'disabled': !fileService.isAcceptedFile(metadata)}"
                                     (click)="fileService.selectFile(file)">
                                     <td class="pr:no fit">
                                         <figure class="embedded by:1x1 a:top r:xxs inline-flex"
@@ -135,13 +135,13 @@
                                             <img [src]="image"
                                                  decoding="async"
                                                  loading="lazy"
-                                                 *ngIf=" (file.fullPath | imageUrl: 'icon' | async) as image">
+                                                 *ngIf=" (file.path | fileUrl: 'icon' | async) as image">
                                         </figure>
                                         <i class="material-icons-outlined f:fade++ a:top" style="line-height: 1.125rem"
                                            *ngIf="metadata.contentType.startsWith('video')">videocam</i>
                                     </td>
                                     <td
-                                        class="f:{{ fileService.selectedFilePaths.has(file.fullPath) && fileService.selectingColor || 'theme' }}">
+                                        class="f:{{ fileService.selectedFilePaths.has(file.path) && fileService.selectingColor || 'theme' }}">
                                         <span class="f:500 f:xs">{{ file.name }}</span>
                                     </td>
                                     <td class="f:xs f:fade t:left t-wrap:no">

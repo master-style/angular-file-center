@@ -11,7 +11,7 @@ export function getHandlerFromFirebaseStorage(storage) {
                 })),
                 files: list.items.map(eachItem => ({
                     name: eachItem.name,
-                    fullPath: eachItem.fullPath,
+                    path: eachItem.fullPath,
                     source: eachItem
                 }))
             }
@@ -63,9 +63,8 @@ export function getHandlerFromFirebaseStorage(storage) {
         getDownloadURL: (filePath: string) => {
             return storage.ref(filePath).getDownloadURL();
         },
-        getMetadata: async (file: IFile) => {
-            const metadata = await storage.ref(file.fullPath).getMetadata();
-
+        getMetadata: async (filePath: string) => {
+            const metadata = await storage.ref(filePath).getMetadata();
             return {
                 name: metadata.name,
                 contentType: metadata.contentType,

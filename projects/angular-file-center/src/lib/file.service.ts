@@ -20,7 +20,7 @@ export interface IFolder {
 
 export interface IFile {
     name: string,
-    fullPath: string,
+    path: string,
     source: any
 }
 
@@ -54,7 +54,7 @@ export interface Handler {
     deleteFile: (filePath: string) => Promise<void>,
     upload: (task: Task) => Promise<void>,
     getDownloadURL: (filePath: string) => Promise<string>,
-    getMetadata: (file: IFile) => Promise<MetadataResult>
+    getMetadata: (filePath: string) => Promise<MetadataResult>
 }
 
 export interface FileOptions {
@@ -172,7 +172,7 @@ export class FileService {
     }
 
     selectFile(file) {
-        const filePath = file.fullPath;
+        const filePath = file.path;
         if (!this.multiple && this.selectedFilePaths.size) {
             this.selectedFilePaths.clear();
             this.selectedFiles = [];
@@ -181,7 +181,7 @@ export class FileService {
             this.selectedFilePaths.has(filePath)
         ) {
             this.selectedFilePaths.delete(filePath);
-            this.selectedFiles = this.selectedFiles.filter((eachFile) => eachFile.fullPath === filePath);
+            this.selectedFiles = this.selectedFiles.filter((eachFile) => eachFile.path === filePath);
         } else {
             this.selectedFilePaths.add(filePath);
             this.selectedFiles.push(file);
@@ -204,15 +204,15 @@ export class FileService {
                                 const imageSizes = this.imageSizes;
                                 // tslint:disable-next-line: forin
                                 for (const eachSizeName in imageSizes) {
-                                    let fullPath = eachFile.fullPath;
+                                    let path = eachFile.path;
                                     if (eachSizeName !== 'origin') {
-                                        const dirPath = eachFile.fullPath.replace(eachFile.name, '');
-                                        fullPath = dirPath + '.@' + eachSizeName + '/' + eachFile.name;
+                                        const dirPath = eachFile.path.replace(eachFile.name, '');
+                                        path = dirPath + '.@' + eachSizeName + '/' + eachFile.name;
                                     }
-                                    promises.push(this.handler.deleteFile(fullPath));
+                                    promises.push(this.handler.deleteFile(path));
                                 }
                             } else {
-                                promises.push(this.handler.deleteFile(eachFile.fullPath));
+                                promises.push(this.handler.deleteFile(eachFile.path));
                             }
                         }
 
