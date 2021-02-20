@@ -46,13 +46,13 @@ const DEFAULT_OPTIONS = {
 }
 
 export interface Handler {
-    list: (directoryPath?: string) => Promise<ListResult> | ListResult,
-    createFolder: (currentPath: string, name: string) => Promise<void> | void,
-    deleteFolder: (folder: IFolder) => Promise<void> | void,
+    list: (directoryPath?: string) => Promise<ListResult>,
+    createFolder: (currentPath: string, name: string) => Promise<void>,
+    deleteFolder: (folder: IFolder) => Promise<void>,
     deleteFile: (filePath: string) => Promise<void>,
-    upload: (task: Task) => Promise<void> | void,
-    getDownloadURL: (filePath: string) => Promise<string> | string,
-    getMetadata: (file: IFile) => Promise<MetadataResult> | MetadataResult
+    upload: (task: Task) => Promise<void>,
+    getDownloadURL: (filePath: string) => Promise<string>,
+    getMetadata: (file: IFile) => Promise<MetadataResult>
 }
 
 export interface FileOptions {
