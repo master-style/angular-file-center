@@ -42,7 +42,9 @@ const DEFAULT_OPTIONS = {
         md: { value: 600 },
         sm: { value: 300 },
         icon: { value: 32, square: true }
-    }
+    },
+    allowWriteFolder: true,
+    allowWriteFolderInRoot: true
 }
 
 export interface Handler {
@@ -58,7 +60,9 @@ export interface Handler {
 export interface FileOptions {
     translations?: Record<string, string>,
     imageSizes?: Record<string, Record<string, any>>,
-    directoryTranslations?: Record<string, Record<string, string>>
+    directoryTranslations?: Record<string, Record<string, string>>,
+    allowWriteFolder?: boolean,
+    allowWriteFolderInRoot?: boolean
 }
 
 export const FILE_OPTIONS = new InjectionToken<FileOptions>('FileOptions');
@@ -86,6 +90,7 @@ export class FileService {
         private sanitizer: DomSanitizer
     ) { 
         this.options = merge(DEFAULT_OPTIONS, options);
+        console.log(this.options);
     }
 
     handler: Handler;
@@ -286,11 +291,11 @@ export class FileService {
         });
     }
 
-    async deletePrefix(directory) {
+    async deleteFolder(directory) {
         try {
             dialog({
-                title: '確定刪除？',
-                text: directory.name + ' ' + '資料夾內的檔案將一併被刪除，且無法復原',
+                title: this.getTranslation('Confirm deletion ?'),
+                text: this.getTranslation('The files in the {0} folder will be deleted and cannot be recovered').replace('{0}', directory.name),
                 type: 'error',
                 onAccept: async () => {
                     try {

@@ -50,8 +50,8 @@
                         </h3>
                     </div>
                     <m-button class="show@hover abs right round xs mr:sm"
-                              *ngIf="fileService.directoryPaths.length && !fileService.querying"
-                              (click)="fileService.deletePrefix(directory); $event.stopPropagation()"
+                              *ngIf="(!fileService.directoryPaths.length && fileService.options.allowWriteFolderInRoot || fileService.directoryPaths.length && fileService.options.allowWriteFolder) && !fileService.querying"
+                              (click)="fileService.deleteFolder(directory); $event.stopPropagation()"
                               style="--button-bg-color-hover: var(--theme-fader)">
                         <i class="material-icons-outlined f:fade++ f:md">delete</i>
                     </m-button>
@@ -309,7 +309,7 @@
                     </label>
                 </m-button>
                 <m-button class="x xs outlined"
-                          [disabled]="!fileService.directoryPaths.length && !fileService.querying"
+                          [attr.disabled]="(!fileService.directoryPaths.length && !fileService.options.allowWriteFolderInRoot || fileService.directoryPaths.length && !fileService.options.allowWriteFolder) && !fileService.querying ? '' : null"
                           (click)="fileService.createFolder()">
                     <i class="material-icons-outlined f:fade++ f:md" part="head">create_new_folder</i>
                     {{ 'Create Folder' | translation }}
