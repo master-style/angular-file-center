@@ -5,8 +5,20 @@
          (close)="fileService.back(route)"
          style="--modal-max-width: var(--wrap-lg); --modal-offset-bottom: 69px; --modal-offset-top: 3rem" hidden>
     <m-header class="px bb">
-        <div slot="start">
-            <ng-container [ngTemplateOutlet]="breadcrumb"></ng-container>
+        <div class="y:sm c:middle" slot="start">
+            <nav class="x" aria-label="breadcrumb">
+                <m-breadcrumb type="anchor" (click)="fileService.go(route)">
+                    <i slot="head" class="material-icons-outlined f:fade++ f:md">folder</i>
+                    {{ 'File Directory' | translation }}
+                </m-breadcrumb>
+                <m-breadcrumb type="anchor"
+                              *ngFor="let directoryPath of fileService.directoryPaths; index as index"
+                              [attr.aria-current]="fileService.directoryPaths.length - 1 === index ? 'page' : null"
+                              (click)="fileService.go(route, directoryPath)">
+                    {{ fileService.getBreadcrumbTranslation(directoryPath) }}
+                </m-breadcrumb>
+            </nav>
+            <m-icon class="x" name="spinner" *ngIf="fileService.querying"></m-icon>
         </div>
     </m-header>
     <m-content id="storage-content"
@@ -20,10 +32,10 @@
             <ng-container [ngTemplateOutlet]="actions"></ng-container>
         </div>
         <div class="y:sm" slot="end">
-            <m-button class="x sm theme+" (click)="fileService.back(route)">
+            <m-button class="x xs theme+" (click)="fileService.back(route)">
                 {{ 'cancel' | translation }}
             </m-button>
-            <m-button class="x sm blue" (click)="apply()" [disabled]="!fileService.selectedFilePaths.size">
+            <m-button class="x xs blue" (click)="apply()" [disabled]="!fileService.selectedFilePaths.size">
                 {{ 'select' | translation }} <ng-container *ngIf="fileService.multiple">{{
                     fileService.selectedFilePaths.size }}
                 </ng-container>
@@ -258,28 +270,12 @@
     </m-content>
 </ng-template>
 
-<ng-template #breadcrumb>
-    <div class="y:sm c:middle">
-        <nav class="x" aria-label="breadcrumb">
-            <m-breadcrumb type="anchor" (click)="fileService.go(route)">
-                <i slot="head" class="material-icons-outlined f:fade++ f:md">folder</i>
-                {{ 'File Directory' | translation }}
-            </m-breadcrumb>
-            <m-breadcrumb type="anchor" *ngFor="let directoryPath of fileService.directoryPaths; index as index"
-                          [attr.aria-current]="fileService.directoryPaths.length - 1 === index ? 'page' : null"
-                          (click)="fileService.go(route, directoryPath)">
-                {{ fileService.getBreadcrumbTranslation(directoryPath) }}
-            </m-breadcrumb>
-        </nav>
-        <m-icon class="x" name="spinner" *ngIf="fileService.querying"></m-icon>
-    </div>
-</ng-template>
-
 <ng-template #actions>
     <div class="y c:middle c:between">
         <div class="x">
             <div class="y:sm">
-                <m-button class="x xs red+" (click)="fileService.deleteFiles()" (mouseenter)="fileService.selectingColor = 'red'"
+                <m-button class="x xs red+" (click)="fileService.deleteFiles()"
+                          (mouseenter)="fileService.selectingColor = 'red'"
                           (mouseleave)="fileService.selectingColor = 'blue'" *ngIf="fileService.selectedFilePaths.size">
                     {{ 'delete' | translation }} <ng-container *ngIf="fileService.multiple">
                         {{ fileService.selectedFilePaths.size }}</ng-container>
@@ -315,7 +311,8 @@
                     {{ 'Create Folder' | translation }}
                 </m-button>
                 <div class="x c:middle" *ngIf="fileService.uploading">
-                    <p class="remark t-line:1">{{ 'fileService.Uploading' | translation }}... {{ fileService.uploading }}</p>
+                    <p class="remark t-line:1">{{ 'fileService.Uploading' | translation }}... {{ fileService.uploading
+                        }}</p>
                 </div>
             </div>
         </div>
