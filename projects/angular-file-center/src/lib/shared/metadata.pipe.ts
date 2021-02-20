@@ -11,6 +11,6 @@ export class MetadataPipe implements PipeTransform {
     ) { }
 
     transform(file: IFile): Promise<MetadataResult> {
-        return this.fileService.handler.getMetadata(file);
+        return this.fileService.handler.getMetadata(file) as Promise<MetadataResult>;
     }
 }

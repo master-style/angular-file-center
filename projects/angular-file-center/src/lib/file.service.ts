@@ -52,7 +52,7 @@ export interface Handler {
     deleteFile: (filePath: string) => Promise<void>,
     upload: (task: Task) => Promise<void> | void,
     getDownloadURL: (filePath: string) => Promise<string> | string,
-    getMetadata: (file: IFile) => Promise<MetadataResult>
+    getMetadata: (file: IFile) => Promise<MetadataResult> | MetadataResult
 }
 
 export interface FileOptions {
