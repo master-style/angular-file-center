@@ -2,19 +2,19 @@
          overlay="close"
          emit
          class="full"
-         (close)="fileService.back(route)"
+         (close)="back()"
          style="--modal-max-width: var(--wrap-lg); --modal-offset-bottom: 69px; --modal-offset-top: 3rem" hidden>
     <m-header class="px bb">
         <div class="y:sm c:middle" slot="start">
             <nav class="x" aria-label="breadcrumb">
-                <m-breadcrumb type="anchor" (click)="fileService.go(route)">
+                <m-breadcrumb type="anchor" (click)="fileService.go()">
                     <i slot="head" class="material-icons-outlined f:fade++ f:md">folder</i>
                     {{ 'File Directory' | translation }}
                 </m-breadcrumb>
                 <m-breadcrumb type="anchor"
                               *ngFor="let directoryPath of fileService.directoryPaths; index as index"
                               [attr.aria-current]="fileService.directoryPaths.length - 1 === index ? 'page' : null"
-                              (click)="fileService.go(route, directoryPath)">
+                              (click)="fileService.go(directoryPath)">
                     {{ fileService.getBreadcrumbTranslation(directoryPath) }}
                 </m-breadcrumb>
             </nav>
@@ -32,7 +32,7 @@
             <ng-container [ngTemplateOutlet]="actions"></ng-container>
         </div>
         <div class="y:sm" slot="end">
-            <m-button class="x xs theme+" (click)="fileService.back(route)">
+            <m-button class="x xs theme+" (click)="back()">
                 {{ 'cancel' | translation }}
             </m-button>
             <m-button class="x xs blue" (click)="apply()" [disabled]="!fileService.selectedFilePaths.size">
@@ -51,7 +51,7 @@
             <m-card type="button" class="x:6 x:2.4@sm theme @hover"
                     [disabled]="fileService.querying"
                     style="--card-b-width: 1px; --card-b-color: var(--b-fadest)"
-                    (click)="fileService.next(directory, route)"
+                    (click)="fileService.next(directory)"
                     [attr.busy]="directory.busy ? '' : null"
                     *ngFor="let directory of fileService.directories; index as index">
                 <article part="body" class="c:center c:middle" style="padding: .6rem .8rem">

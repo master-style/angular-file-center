@@ -12,6 +12,7 @@ import { loadImageFromFile } from './shared/utils/load-image-from-file';
 
 import { isAcceptedFile } from './shared/utils/is-accepted-file';
 import { dialog } from '@master/ui';
+import { FileComponent } from './file.component';
 
 export interface IFolder {
     name: string,
@@ -37,7 +38,7 @@ export interface MetadataResult {
 }
 
 const DEFAULT_OPTIONS = {
-    imageSizes:  {
+    imageSizes: {
         origin: { value: 800 },
         md: { value: 600 },
         sm: { value: 300 },
@@ -89,8 +90,9 @@ export class FileService {
         private location: Location,
         private router: Router,
         @Inject(FILE_OPTIONS) public options: FileOptions,
-        private sanitizer: DomSanitizer
-    ) { 
+        private sanitizer: DomSanitizer,
+        private fileComponent: FileComponent
+    ) {
         this.options = merge(DEFAULT_OPTIONS, options);
         console.log(this.options);
     }
@@ -222,7 +224,7 @@ export class FileService {
                     } catch (error) {
                         console.log(error);
                     }
-                    
+
                     this.selectedFiles = [];
                     this.selectedFilePaths.clear();
                     await this.list(this.directoryPaths.join('/'));
@@ -309,7 +311,7 @@ export class FileService {
                     } catch (error) {
                         console.log(error);
                     }
-                    
+
                     return true;
                 },
                 acceptButton: {
@@ -396,28 +398,24 @@ export class FileService {
             .sort((a, b) => b.artifact?.width - a.artifact?.width)
             .sort((a, b) => b.date.getTime() - a.date.getTime());
 
-       await this.handler.upload(task);
+        await this.handler.upload(task);
     }
 
-    back(defaultRoute) {
-        this.router.navigate(['../'], { relativeTo: defaultRoute.parent });
+    async next(directory) {
+        this.router.navigate(['./', directory.name], { relativeTo: this.directoryRoute ?? this.fileComponent.route });
     }
 
-    async next(directory, defaultRoute) {
-        this.router.navigate(['./', directory.name], { relativeTo: this.directoryRoute ?? defaultRoute });
-    }
-
-    async go(defaultRoute, directoryPath?) {
+    async go(directoryPath?) {
         const index = this.directoryPaths.indexOf(directoryPath);
-        const temp = index === -1
+        const paths = index === -1
             ? []
             : this.directoryPaths.slice(0, index + 1);
 
         this.router.navigate(
-            temp.length
-                ? ['./', ...temp]
+            paths.length
+                ? ['./', ...paths]
                 : ['./'],
-            { relativeTo: defaultRoute }
+            { relativeTo: this.fileComponent.route }
         );
     }
 }
