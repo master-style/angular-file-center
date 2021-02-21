@@ -172,6 +172,8 @@ export class FileService {
         this.files = [];
         this.directories = [];
         this.directoryPaths = [];
+        this.selectedFiles = [];
+        this.selectedFilePaths.clear();
     }
 
     selectFile(file) {
