@@ -60,5 +60,6 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
         this.fileService.options.accept = undefined;
         this.fileService.targetKey = undefined;
         this.fileService.options.multiple = undefined;
+        this.fileService.mode = '';
     }
 }

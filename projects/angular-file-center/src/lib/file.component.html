@@ -35,7 +35,10 @@
             <m-button class="x xs theme+" (click)="fileService.back()">
                 {{ 'cancel' | translation }}
             </m-button>
-            <m-button class="x xs blue" (click)="fileService.apply()" [disabled]="!fileService.selectedFilePaths.size">
+            <m-button class="x xs blue"
+                      *ngIf="fileService.mode === 'select'"
+                      (click)="fileService.apply()"
+                      [disabled]="!fileService.selectedFilePaths.size">
                 {{ 'select' | translation }} <ng-container *ngIf="fileService.options.multiple">{{
                     fileService.selectedFilePaths.size }}
                 </ng-container>
@@ -277,7 +280,8 @@
                 <m-button class="x xs red+" (click)="fileService.deleteFiles()"
                           (mouseenter)="fileService.selectingColor = 'red'"
                           (mouseleave)="fileService.selectingColor = 'blue'" *ngIf="fileService.selectedFilePaths.size">
-                    {{ 'delete' | translation }} <ng-container *ngIf="fileService.options.multiple">
+                    {{ 'delete' | translation }} <ng-container
+                                  *ngIf="fileService.options.multiple || !fileService.mode">
                         {{ fileService.selectedFilePaths.size }}</ng-container>
                 </m-button>
                 <m-button class="x xs outlined"

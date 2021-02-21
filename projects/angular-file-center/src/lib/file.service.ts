@@ -104,7 +104,7 @@ export class FileService {
     targetKey: string;
     selectingColor = 'blue';
     onDirectoryChanged = new Subject<ActivatedRoute>();
-
+    mode = '';
     page = 0;
     files = [];
     querying = true;
@@ -150,13 +150,9 @@ export class FileService {
     select(target: any, targetKey: string, routerLink: string[], options: FileOptions) {
         this.target = target;
         this.targetKey = targetKey;
+        this.mode = 'select';
         this.options = merge(this.options, options);
         this.router.navigate([this.router.url, ...routerLink])
-    }
-
-    reset() {
-        this.options.accept = 'image/*,video/*';
-        this.options.multiple = true;
     }
 
     async list(directoryPath?) {
@@ -174,6 +170,7 @@ export class FileService {
 
     selectFile(file) {
         const filePath = file.path;
+        // 若為單選，清空前一次所選
         if (!this.options.multiple && this.selectedFilePaths.size) {
             this.selectedFilePaths.clear();
             this.selectedFiles = [];
@@ -425,7 +422,7 @@ export class FileService {
         } else {
             this.target[this.targetKey] = this.selectedFilePaths.values().next().value;
         }
-
+        this.mode = '';
         this.back();
     }
 
@@ -440,6 +437,11 @@ export class FileService {
         modal.close();
         await modal.changing;
         return true;
+    }
+
+    canActivate() {
+        return this.target && this.mode === 'select'
+            || !this.target && this.mode === ''
     }
 
 }
