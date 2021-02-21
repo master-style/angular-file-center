@@ -90,13 +90,11 @@ interface Task {
 export class FileService {
 
     constructor(
-        private location: Location,
         private router: Router,
         @Inject(FILE_OPTIONS) public options: FileOptions,
         private sanitizer: DomSanitizer
     ) {
         this.options = merge(DEFAULT_OPTIONS, options);
-        console.log(this.options);
     }
 
     handler: Handler;
@@ -153,7 +151,7 @@ export class FileService {
         this.target = target;
         this.targetKey = targetKey;
         this.options = merge(this.options, options);
-        this.router.navigate([this.router.url, ...routerLink])
+        this.router.navigateByUrl(this.router.url + '/' + routerLink.join('/'))
     }
 
     reset() {

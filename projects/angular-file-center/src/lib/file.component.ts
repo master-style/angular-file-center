@@ -41,16 +41,12 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
                     await this.fileService.list(directoryPaths.join('/'));
 
                     this.fileService.directoryPaths = directoryPaths;
-                }),
-            this.router.events.subscribe((event) => {
-                if (event instanceof NavigationEnd) {
-                    if (!this.route.snapshot.firstChild) {
-                        this.fileService.onDirectoryChanged.next(null);
-                    }
-                }
-            })
+                })
         );
 
+        if (!this.route.snapshot.firstChild) {
+            this.fileService.onDirectoryChanged.next(null);
+        }
     }
 
     ngAfterViewInit(): void {
