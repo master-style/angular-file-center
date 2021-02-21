@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { ElementRef, Inject, Injectable, InjectionToken } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -448,7 +448,12 @@ export class FileService {
         return true;
     }
 
-    canActivate(): boolean {
-        return !!this.target;
+    canActivate(route: ActivatedRouteSnapshot): boolean {
+        if (this.target) {
+            return true;
+        } else {
+            this.router.navigate(['../', { relativeTo: route.parent }]);
+            return false;
+        }
     }
 }
