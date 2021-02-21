@@ -107,6 +107,7 @@ export class FileService {
     selectingColor = 'blue';
     onDirectoryChanged = new Subject<ActivatedRoute>();
 
+    navigating = false;
     page = 0;
     files = [];
     querying = true;
@@ -153,7 +154,12 @@ export class FileService {
         this.target = target;
         this.targetKey = targetKey;
         this.options = merge(this.options, options);
-        this.router.navigate([this.router.url, ...routerLink])
+        this.navigating = true;
+        this.router
+            .navigate([this.router.url, ...routerLink])
+            .then(() => {
+                this.navigating = false;
+            });
     }
 
     reset() {
