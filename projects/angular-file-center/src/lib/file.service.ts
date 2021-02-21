@@ -165,6 +165,15 @@ export class FileService {
         this.querying = false;
     }
 
+    clear() {
+        this.target = undefined;
+        this.targetKey = undefined;
+        this.mode = '';
+        this.files = [];
+        this.directories = [];
+        this.directoryPaths = [];
+    }
+
     selectFile(file) {
         const filePath = file.path;
         // 若為單選，清空前一次所選
@@ -426,6 +435,8 @@ export class FileService {
     back() {
         this.router.navigate(['../'], { relativeTo: this.route.parent })
     }
+
+
 
     async canDeactivate(
         component

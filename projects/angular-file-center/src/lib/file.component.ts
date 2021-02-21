@@ -57,9 +57,7 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngOnDestroy(): void {
         this.subscriptions.forEach((eachSubscriptions) => eachSubscriptions.unsubscribe());
-        this.fileService.target = undefined;
-        this.fileService.targetKey = undefined;
-        this.fileService.mode = '';
+        this.fileService.clear();
     }
 
 
