@@ -98,7 +98,7 @@ export class FileService {
     }
 
     handler: Handler;
-
+    route: ActivatedRoute;
     tasks = [];
     target: any;
     targetKey: string;
@@ -402,7 +402,7 @@ export class FileService {
     }
 
     async next(directory) {
-        this.router.navigate(['./', directory.name], { relativeTo: this.directoryRoute ?? this.fileComponent.route });
+        this.router.navigate(['./', directory.name], { relativeTo: this.directoryRoute ?? this.route });
     }
 
     async go(directoryPath?) {
@@ -415,7 +415,7 @@ export class FileService {
             paths.length
                 ? ['./', ...paths]
                 : ['./'],
-            { relativeTo: this.fileComponent.route }
+            { relativeTo: this.route }
         );
     }
 
@@ -433,6 +433,6 @@ export class FileService {
     }
 
     back() {
-        this.router.navigate(['../'], { relativeTo: this.fileComponent.route })
+        this.router.navigate(['../'], { relativeTo: this.route })
     }
 }

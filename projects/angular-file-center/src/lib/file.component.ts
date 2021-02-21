@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FileService } from './file.service';
 
 @Component({
@@ -13,8 +13,7 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(
         public route: ActivatedRoute,
         public fileService: FileService,
-        public location: Location,
-        private router: Router
+        public location: Location
     ) { }
 
     @ViewChild('modal') modalRef: ElementRef<any>;
@@ -23,6 +22,7 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
     subscription;
 
     async ngOnInit() {
+        this.fileService.route = this.route;
         this.subscription = this.fileService
             .onDirectoryChanged
             .subscribe(async activatedRoute => {
