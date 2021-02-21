@@ -47,7 +47,7 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!this.route.snapshot.firstChild) {
             this.fileService.onDirectoryChanged.next(null);
         }
-        
+
         this.modalRef?.nativeElement.open();
     }
 
@@ -55,8 +55,8 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
         this.subscription.unsubscribe();
 
         this.fileService.target = undefined;
-        this.fileService.accept = undefined;
+        this.fileService.options.accept = undefined;
         this.fileService.targetKey = undefined;
-        this.fileService.multiple = undefined;
+        this.fileService.options.multiple = undefined;
     }
 }

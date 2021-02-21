@@ -44,7 +44,9 @@ const DEFAULT_OPTIONS = {
         icon: { value: 32, square: true }
     },
     allowWriteFolder: true,
-    allowWriteFolderInRoot: true
+    allowWriteFolderInRoot: true,
+    accept: '',
+    multiple: true
 }
 
 export interface Handler {
@@ -64,7 +66,9 @@ export interface FileOptions {
     imageSizes?: Record<string, Record<string, any>>,
     directoryTranslations?: Record<string, Record<string, string>>,
     allowWriteFolder?: boolean,
-    allowWriteFolderInRoot?: boolean
+    allowWriteFolderInRoot?: boolean,
+    accept?: string,
+    multiple?: boolean
 }
 
 export const FILE_OPTIONS = new InjectionToken<FileOptions>('FileOptions');
@@ -100,8 +104,6 @@ export class FileService {
     tasks = [];
     target: any;
     targetKey: string;
-    accept = '';
-    multiple = false;
     selectingColor = 'blue';
     onDirectoryChanged = new Subject<ActivatedRoute>();
 
@@ -144,24 +146,19 @@ export class FileService {
     }
 
     isAcceptedFile(metadata: { name: string, contentType: string }): boolean {
-        return isAcceptedFile(metadata, this.accept);
+        return isAcceptedFile(metadata, this.options.accept);
     }
 
-    select(target: any, targetKey: string, options: {
-        accept?: string,
-        multiple?: boolean,
-        routerLink: string[]
-    }) {
+    select(target: any, targetKey: string, routerLink: string[], options: FileOptions) {
         this.target = target;
         this.targetKey = targetKey;
-        this.accept = 'accept' in options ? options.accept : this.accept;
-        this.multiple = 'multiple' in options ? options.multiple : this.multiple;
-        this.router.navigate([this.router.url, ...options.routerLink])
+        this.options = merge(this.options, options);
+        this.router.navigate([this.router.url, ...routerLink])
     }
 
     reset() {
-        this.accept = 'image/*,video/*';
-        this.multiple = true;
+        this.options.accept = 'image/*,video/*';
+        this.options.multiple = true;
     }
 
     async list(directoryPath?) {
@@ -179,7 +176,7 @@ export class FileService {
 
     selectFile(file) {
         const filePath = file.path;
-        if (!this.multiple && this.selectedFilePaths.size) {
+        if (!this.options.multiple && this.selectedFilePaths.size) {
             this.selectedFilePaths.clear();
             this.selectedFiles = [];
         }
@@ -422,7 +419,7 @@ export class FileService {
     }
 
     async apply() {
-        if (this.multiple) {
+        if (this.options.multiple) {
             if (!this.target[this.targetKey]) {
                 this.target[this.targetKey] = [];
             }

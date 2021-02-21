@@ -36,7 +36,7 @@
                 {{ 'cancel' | translation }}
             </m-button>
             <m-button class="x xs blue" (click)="fileService.apply()" [disabled]="!fileService.selectedFilePaths.size">
-                {{ 'select' | translation }} <ng-container *ngIf="fileService.multiple">{{
+                {{ 'select' | translation }} <ng-container *ngIf="fileService.options.multiple">{{
                     fileService.selectedFilePaths.size }}
                 </ng-container>
             </m-button>
@@ -277,7 +277,7 @@
                 <m-button class="x xs red+" (click)="fileService.deleteFiles()"
                           (mouseenter)="fileService.selectingColor = 'red'"
                           (mouseleave)="fileService.selectingColor = 'blue'" *ngIf="fileService.selectedFilePaths.size">
-                    {{ 'delete' | translation }} <ng-container *ngIf="fileService.multiple">
+                    {{ 'delete' | translation }} <ng-container *ngIf="fileService.options.multiple">
                         {{ fileService.selectedFilePaths.size }}</ng-container>
                 </m-button>
                 <m-button class="x xs outlined"
@@ -287,7 +287,7 @@
                     {{ 'file' | translation }}
                     <label class="abs w:full h:full touch">
                         <input type="file"
-                               [accept]="fileService.accept"
+                               [accept]="fileService.options.accept"
                                multiple
                                (change)="fileService.upload($event)"
                                style="opacity: 0; pointer-events: none;">
@@ -299,7 +299,7 @@
                     <i class="material-icons-outlined f:fade++ f:md" part="head">upload</i>
                     {{ 'folder' | translation }}
                     <label class="abs w:full h:full touch">
-                        <input type="file" webkitdirectory mozdirectory [accept]="fileService.accept" multiple
+                        <input type="file" webkitdirectory mozdirectory [accept]="fileService.options.accept" multiple
                                (change)="fileService.upload($event)"
                                style="opacity: 0; pointer-events: none;">
                     </label>
