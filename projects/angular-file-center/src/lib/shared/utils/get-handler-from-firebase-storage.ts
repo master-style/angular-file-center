@@ -1,4 +1,4 @@
-import { Handler, IFile, IFolder } from '../file.service';
+import { Handler, IFolder } from '../../file.service';
 
 export function getHandlerFromFirebaseStorage(storage) {
     return {
