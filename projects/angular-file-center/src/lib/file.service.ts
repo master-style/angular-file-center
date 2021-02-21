@@ -448,8 +448,7 @@ export class FileService {
         return true;
     }
 
-    canActivate() {
-        return this.target
+    canActivate(): boolean {
+        return !!this.target;
     }
-
 }
