@@ -90,6 +90,7 @@ interface Task {
 export class FileService {
 
     constructor(
+        private activatedRoute: ActivatedRoute,
         private router: Router,
         @Inject(FILE_OPTIONS) public options: FileOptions,
         private sanitizer: DomSanitizer
@@ -448,11 +449,11 @@ export class FileService {
         return true;
     }
 
-    canActivate(route: ActivatedRouteSnapshot): boolean {
+    canActivate(): boolean {
         if (this.target) {
             return true;
         } else {
-            this.router.navigate(['../', { relativeTo: route }]);
+            this.router.navigate(['../'], { relativeTo: this.activatedRoute });
             return false;
         }
     }
