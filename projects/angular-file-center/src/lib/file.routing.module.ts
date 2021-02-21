@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FileComponent } from './file.component';
-import { FileService } from './file.service';
 
 const routes: Routes = [
     {
-        path: '',
+        path: 'file',
         component: FileComponent,
         children: [
             {
