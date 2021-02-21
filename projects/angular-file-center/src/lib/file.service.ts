@@ -10,8 +10,8 @@ import { convertImage } from './shared/utils/convert-image';
 import { isImageFileName } from './shared/utils/is-image-file-name';
 import { loadImageFromFile } from './shared/utils/load-image-from-file';
 
-import { isAcceptedFile } from './shared/utils/is-accepted-file';
 import { dialog } from '@master/ui';
+import { isAcceptedFile } from './shared/utils/is-accepted-file';
 
 export interface IFolder {
     name: string,
