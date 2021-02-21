@@ -2,7 +2,7 @@
          overlay="close"
          emit
          class="full"
-         (close)="back()"
+         (close)="fileService.back()"
          style="--modal-max-width: var(--wrap-lg); --modal-offset-bottom: 69px; --modal-offset-top: 3rem" hidden>
     <m-header class="px bb">
         <div class="y:sm c:middle" slot="start">
@@ -32,10 +32,10 @@
             <ng-container [ngTemplateOutlet]="actions"></ng-container>
         </div>
         <div class="y:sm" slot="end">
-            <m-button class="x xs theme+" (click)="back()">
+            <m-button class="x xs theme+" (click)="fileService.back()">
                 {{ 'cancel' | translation }}
             </m-button>
-            <m-button class="x xs blue" (click)="apply()" [disabled]="!fileService.selectedFilePaths.size">
+            <m-button class="x xs blue" (click)="fileService.apply()" [disabled]="!fileService.selectedFilePaths.size">
                 {{ 'select' | translation }} <ng-container *ngIf="fileService.multiple">{{
                     fileService.selectedFilePaths.size }}
                 </ng-container>

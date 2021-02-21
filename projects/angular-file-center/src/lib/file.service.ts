@@ -418,4 +418,21 @@ export class FileService {
             { relativeTo: this.fileComponent.route }
         );
     }
+
+    async apply() {
+        if (this.multiple) {
+            if (!this.target[this.targetKey]) {
+                this.target[this.targetKey] = [];
+            }
+            this.target[this.targetKey].push(...Array.from(this.selectedFilePaths));
+        } else {
+            this.target[this.targetKey] = this.selectedFilePaths.values().next().value;
+        }
+
+        this.back();
+    }
+
+    back() {
+        this.router.navigate(['../'], { relativeTo: this.fileComponent.route })
+    }
 }

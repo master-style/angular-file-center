@@ -58,21 +58,4 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
         this.fileService.targetKey = undefined;
         this.fileService.multiple = undefined;
     }
-
-    async apply() {
-        if (this.fileService.multiple) {
-            if (!this.fileService.target[this.fileService.targetKey]) {
-                this.fileService.target[this.fileService.targetKey] = [];
-            }
-            this.fileService.target[this.fileService.targetKey].push(...Array.from(this.fileService.selectedFilePaths));
-        } else {
-            this.fileService.target[this.fileService.targetKey] = this.fileService.selectedFilePaths.values().next().value;
-        }
-
-        this.back();
-    }
-
-    back() {
-        this.router.navigate(['../'], { relativeTo: this.route })
-    }
 }
