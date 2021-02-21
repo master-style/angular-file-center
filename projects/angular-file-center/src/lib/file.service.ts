@@ -151,14 +151,12 @@ export class FileService {
 
     select(target: any, targetKey: string, options: {
         accept?: string,
-        multiple?: boolean,
-        directoryLink: string[]
+        multiple?: boolean
     }) {
         this.target = target;
         this.accept = options.accept;
         this.targetKey = targetKey;
         this.multiple = options.multiple;
-        this.router.navigateByUrl(this.router.url + '/' + options.directoryLink.join('/'));
     }
 
     reset() {
