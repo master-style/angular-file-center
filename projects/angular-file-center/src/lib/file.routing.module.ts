@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FileComponent } from './file.component';
 
 export const fileRouteConfig = {
-    path: 'file',
+    path: '',
     component: FileComponent,
     children: [
         {

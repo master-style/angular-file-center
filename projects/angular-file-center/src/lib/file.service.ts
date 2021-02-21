@@ -149,12 +149,16 @@ export class FileService {
         return isAcceptedFile(metadata, this.accept);
     }
 
-    select(target: any, targetKey: string, accept: string, multiple: boolean, directoryPath: string) {
+    select(target: any, targetKey: string, options: {
+        accept?: string,
+        multiple?: boolean,
+        directoryLink: string[]
+    }) {
         this.target = target;
-        this.accept = accept;
+        this.accept = options.accept;
         this.targetKey = targetKey;
-        this.multiple = multiple;
-        this.router.navigateByUrl(this.router.url + '/file' + (directoryPath ? '/' + directoryPath : ''));
+        this.multiple = options.multiple;
+        this.router.navigateByUrl(this.router.url + '/' + options.directoryLink.join('/'));
     }
 
     reset() {
@@ -433,6 +437,6 @@ export class FileService {
     }
 
     back() {
-        this.router.navigate(['../'], { relativeTo: this.route })
+        this.router.navigate(['../'], { relativeTo: this.route.parent })
     }
 }
