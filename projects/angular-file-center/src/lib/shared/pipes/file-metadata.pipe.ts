@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { FileService, MetadataResult } from '../../file.service';
 
 @Pipe({
-    name: 'file-metadata'
+    name: 'fileMetadata'
 })
 export class FileMetadataPipe implements PipeTransform {
 
