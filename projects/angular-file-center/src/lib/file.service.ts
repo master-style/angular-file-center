@@ -159,10 +159,10 @@ export class FileService {
     async list(directoryPath?) {
         this.querying = true;
         const list = await this.handler.list(directoryPath);
+        this.contentRef?.nativeElement.reset();
         this.directories = list.folders;
         this.files = list.files;
         this.querying = false;
-        this.contentRef?.nativeElement.reset();
     }
 
     selectFile(file) {
