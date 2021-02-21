@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build --prod",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "e2e": "ng e2e"
   },
   "dependencies": {
     "@angular/animations": "~11.2.1",
