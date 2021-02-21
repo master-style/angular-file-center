@@ -12,7 +12,6 @@ import { loadImageFromFile } from './shared/utils/load-image-from-file';
 
 import { isAcceptedFile } from './shared/utils/is-accepted-file';
 import { dialog } from '@master/ui';
-import { FileComponent } from './file.component';
 
 export interface IFolder {
     name: string,
@@ -90,8 +89,7 @@ export class FileService {
         private location: Location,
         private router: Router,
         @Inject(FILE_OPTIONS) public options: FileOptions,
-        private sanitizer: DomSanitizer,
-        private fileComponent: FileComponent
+        private sanitizer: DomSanitizer
     ) {
         this.options = merge(DEFAULT_OPTIONS, options);
         console.log(this.options);
