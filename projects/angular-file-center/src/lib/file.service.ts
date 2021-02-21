@@ -452,7 +452,7 @@ export class FileService {
         if (this.target) {
             return true;
         } else {
-            this.router.navigate(['../', { relativeTo: route.parent }]);
+            this.router.navigate(['../', { relativeTo: route }]);
             return false;
         }
     }
