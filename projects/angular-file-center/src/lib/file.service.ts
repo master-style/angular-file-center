@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { ElementRef, Inject, Injectable, InjectionToken } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import cloneDeep from 'lodash-es/cloneDeep';
@@ -110,6 +110,7 @@ export class FileService {
     querying = true;
     uploading = '';
     deleting = false;
+    contentRef: ElementRef<any>;
 
     selectedFilePaths = new Set();
     selectedFiles = [];
@@ -160,8 +161,10 @@ export class FileService {
         const list = await this.handler.list(directoryPath);
         this.directories = list.folders;
         this.files = list.files;
-        this.page = 0;
         this.querying = false;
+        if (this.contentRef) {
+            this.contentRef.nativeElement.page = 0;
+        }
     }
 
     selectFile(file) {

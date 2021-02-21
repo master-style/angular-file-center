@@ -18,6 +18,7 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
     ) { }
 
     @ViewChild('modal') modalRef: ElementRef<any>;
+    @ViewChild('content') contentRef: ElementRef<any>;
 
     localStorage = localStorage;
     subscriptions = [];
@@ -51,15 +52,15 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngAfterViewInit(): void {
         this.modalRef?.nativeElement.open();
+        this.fileService.contentRef = this.contentRef;
     }
 
     ngOnDestroy(): void {
         this.subscriptions.forEach((eachSubscriptions) => eachSubscriptions.unsubscribe());
-
         this.fileService.target = undefined;
-        this.fileService.options.accept = undefined;
         this.fileService.targetKey = undefined;
-        this.fileService.options.multiple = undefined;
         this.fileService.mode = '';
     }
+
+
 }

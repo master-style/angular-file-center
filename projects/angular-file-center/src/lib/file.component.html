@@ -23,7 +23,7 @@
     </m-header>
     <m-content scroll-y
                emit
-               (more)="fileService.page = fileService.page + 1">
+               #content>
         <div class="content p p:lg@sm"
              [ngClass]="{'fileService.querying': fileService.querying}">
             <div class="y" *ngIf="fileService.directories.length">
