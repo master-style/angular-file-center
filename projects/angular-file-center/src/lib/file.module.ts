@@ -23,7 +23,8 @@ import { FileMetadataPipe } from './shared/pipes/file-metadata.pipe';
     exports: [
         CommonModule,
         FileUrlPipe,
-        FileMetadataPipe
+        FileMetadataPipe,
+        FileComponent
     ],
     schemas: [
         CUSTOM_ELEMENTS_SCHEMA
