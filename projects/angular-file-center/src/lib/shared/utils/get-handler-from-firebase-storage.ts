@@ -69,7 +69,7 @@ export function getHandlerFromFirebaseStorage(storage) {
                 name: metadata.name,
                 contentType: metadata.contentType,
                 size: metadata.size,
-                timeCreated: metadata.timeCreated
+                createdAt: metadata.timeCreated
             }
         }
     } as Handler;

@@ -33,7 +33,7 @@ export interface MetadataResult {
     name: string;
     contentType: string;
     size: number;
-    timeCreated: Date;
+    createdAt: Date;
 }
 
 const DEFAULT_OPTIONS = {
