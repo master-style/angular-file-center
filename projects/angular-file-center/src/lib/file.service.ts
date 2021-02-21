@@ -149,12 +149,14 @@ export class FileService {
 
     select(target: any, targetKey: string, options: {
         accept?: string,
-        multiple?: boolean
+        multiple?: boolean,
+        routerLink: string[]
     }) {
         this.target = target;
-        this.accept = options.accept;
         this.targetKey = targetKey;
-        this.multiple = options.multiple;
+        this.accept = 'accept' in options ? options.accept : this.accept;
+        this.multiple = 'multiple' in options ? options.multiple : this.multiple;
+        this.router.navigate([this.router.url, ...options.routerLink])
     }
 
     reset() {
