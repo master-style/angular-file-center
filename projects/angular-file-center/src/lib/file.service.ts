@@ -449,8 +449,7 @@ export class FileService {
     }
 
     canActivate() {
-        return this.target && this.mode === 'select'
-            || !this.target && this.mode === ''
+        return this.target
     }
 
 }
