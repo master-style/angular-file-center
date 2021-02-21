@@ -415,8 +415,11 @@ export class FileService {
             paths.length
                 ? ['./', ...paths]
                 : ['./'],
-            { relativeTo: this.route }
-        );
+            { relativeTo: this.route });
+
+        if (!paths.length) {
+            this.onDirectoryChanged.next(null);
+        }
     }
 
     async apply() {
@@ -435,8 +438,6 @@ export class FileService {
     back() {
         this.router.navigate(['../'], { relativeTo: this.route.parent })
     }
-
-
 
     async canDeactivate(
         component

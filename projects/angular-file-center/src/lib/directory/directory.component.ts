@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FileService } from '../file.service';
 
@@ -7,7 +7,7 @@ import { FileService } from '../file.service';
     templateUrl: './directory.component.html',
     styleUrls: ['./directory.component.scss']
 })
-export class DirectoryComponent implements OnInit, OnDestroy {
+export class DirectoryComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
@@ -16,9 +16,5 @@ export class DirectoryComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.fileService.onDirectoryChanged.next(this.route);
-    }
-
-    ngOnDestroy(): void {
-        this.fileService.onDirectoryChanged.next(this.route.parent.parent);
     }
 }
