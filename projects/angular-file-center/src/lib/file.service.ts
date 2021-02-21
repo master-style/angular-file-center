@@ -454,7 +454,12 @@ export class FileService {
         if (this.target) {
             return true;
         } else {
-            this.router.navigate(['../', { relativeTo: route.parent }]);
+            let redirectTo = route.pathFromRoot
+                .filter(p => p !== route && p.url !== null && p.url.length > 0)
+                .reduce((arr, p) => arr.concat(p.url.map(u => u.path)), []);
+
+            this.router.navigate(redirectTo, { relativeTo: this.route });
+
             return false;
         }
     }
