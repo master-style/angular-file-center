@@ -90,7 +90,6 @@ interface Task {
 export class FileService {
 
     constructor(
-        private activatedRoute: ActivatedRoute,
         private router: Router,
         @Inject(FILE_OPTIONS) public options: FileOptions,
         private sanitizer: DomSanitizer
@@ -449,11 +448,16 @@ export class FileService {
         return true;
     }
 
-    canActivate(): boolean {
+    canActivate(route: ActivatedRouteSnapshot): boolean {
         if (this.target) {
             return true;
         } else {
-            this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+            let redirectTo = route.pathFromRoot
+                .filter(p => p !== route && p.url !== null && p.url.length > 0)
+                .reduce((arr, p) => arr.concat(p.url.map(u => u.path)), []);
+
+            this.router.navigate(redirectTo, { relativeTo: this.route });
+
             return false;
         }
     }
