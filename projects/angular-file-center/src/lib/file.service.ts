@@ -6,11 +6,11 @@ import cloneDeep from 'lodash-es/cloneDeep';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import merge from 'lodash-es/merge';
 
-import { convertImage } from './shared/convert-image';
-import { isImageFileName } from './shared/is-image-file-name';
-import { loadImageFromFile } from './shared/load-image-from-file';
+import { convertImage } from './shared/utils/convert-image';
+import { isImageFileName } from './shared/utils/is-image-file-name';
+import { loadImageFromFile } from './shared/utils/load-image-from-file';
 
-import { isAcceptedFile } from './shared/is-accepted-file';
+import { isAcceptedFile } from './shared/utils/is-accepted-file';
 import { dialog } from '@master/ui';
 
 export interface IFolder {
