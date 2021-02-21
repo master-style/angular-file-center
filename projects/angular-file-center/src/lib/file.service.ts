@@ -177,7 +177,7 @@ export class FileService {
     selectFile(file) {
         const filePath = file.path;
         // 若為單選，清空前一次所選
-        if (!this.options.multiple && this.selectedFilePaths.size) {
+        if (!this.options.multiple && this.selectedFilePaths.size && !this.mode) {
             this.selectedFilePaths.clear();
             this.selectedFiles = [];
         }
