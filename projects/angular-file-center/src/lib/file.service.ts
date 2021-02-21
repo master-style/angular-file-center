@@ -435,4 +435,14 @@ export class FileService {
     back() {
         this.router.navigate(['../'], { relativeTo: this.route.parent })
     }
+
+    async canDeactivate(
+        component
+    ): Promise<boolean> {
+        const modal = component.modalRef.nativeElement;
+        modal.close();
+        await modal.changing;
+        return true;
+    }
+
 }
