@@ -162,9 +162,7 @@ export class FileService {
         this.directories = list.folders;
         this.files = list.files;
         this.querying = false;
-        if (this.contentRef) {
-            this.contentRef.nativeElement.page = 0;
-        }
+        this.contentRef?.nativeElement.reset();
     }
 
     selectFile(file) {
