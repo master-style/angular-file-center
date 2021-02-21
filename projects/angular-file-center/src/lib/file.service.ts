@@ -52,8 +52,8 @@ export interface Handler {
     createFolder: (currentPath: string, name: string) => Promise<void>,
     deleteFolder: (folder: IFolder) => Promise<void>,
     deleteFile: (filePath: string) => Promise<void>,
-    onUpload?: () => Promise<void>,
     upload: (task: Task) => Promise<void>,
+    onUpload?: () => Promise<void>,
     onUploaded?: () => Promise<void>,
     getDownloadURL: (filePath: string) => Promise<string>,
     getMetadata: (filePath: string) => Promise<MetadataResult>
