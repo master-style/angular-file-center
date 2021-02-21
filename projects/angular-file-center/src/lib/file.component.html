@@ -21,11 +21,150 @@
             <m-icon class="x" name="spinner" *ngIf="fileService.querying"></m-icon>
         </div>
     </m-header>
-    <m-content id="storage-content"
-               scroll-y
+    <m-content scroll-y
                emit
                (more)="fileService.page = fileService.page + 1">
-        <ng-container [ngTemplateOutlet]="content"></ng-container>
+        <div class="content p p:lg@sm"
+             [ngClass]="{'fileService.querying': fileService.querying}">
+            <div class="y" *ngIf="fileService.directories.length">
+                <m-card type="button" class="x:6 x:2.4@sm theme @hover"
+                        [disabled]="fileService.querying"
+                        style="--card-b-width: 1px; --card-b-color: var(--b-fadest)"
+                        (click)="fileService.next(directory)"
+                        [attr.busy]="directory.busy ? '' : null"
+                        *ngFor="let directory of fileService.directories; index as index">
+                    <article part="body" class="c:center c:middle" style="padding: .6rem .8rem">
+                        <div class="y:sm c-wrap:no c:middle">
+                            <i class="x material-icons-outlined f:fade++">folder</i>
+                            <h3 class="x:fill f:xs f:500 f:theme" style="line-height: 1.3; word-break: break-word;">
+                                {{ fileService.getFolderTranslation(directory.name) }}
+                            </h3>
+                        </div>
+                        <m-button class="show@hover abs right round xs mr:sm"
+                                  *ngIf="(!fileService.directoryPaths.length && fileService.options.allowWriteFolderInRoot || fileService.directoryPaths.length && fileService.options.allowWriteFolder) && !fileService.querying"
+                                  (click)="fileService.deleteFolder(directory); $event.stopPropagation()"
+                                  style="--button-bg-color-hover: var(--theme-fader)">
+                            <i class="material-icons-outlined f:fade++ f:md">delete</i>
+                        </m-button>
+                    </article>
+                </m-card>
+            </div>
+            <div class="y"
+                 *ngIf="localStorage.fileView === 'grid' && fileService.files.length"
+                 [ngClass]="{'mt:sm': fileService.directories.length}">
+                <ng-container *ngFor="let file of fileService.files; index as index">
+                    <ng-container
+                                  *ngIf="index < (fileService.page + 1) * 10">
+                        <m-card type="button" class="x:6 x:2.4@sm theme"
+                                [ngStyle]="{'box-shadow': fileService.selectedFilePaths.has(file.path) ? ('0 0 0 3px var(--' + fileService.selectingColor) + ')' : null }"
+                                style="--card-b-width: 1px; --card-b-color: var(--b-fadest)"
+                                (click)="fileService.selectFile(file)"
+                                *ngIf="file | fileMetadata | async as metadata"
+                                [disabled]="!fileService.isAcceptedFile(metadata)">
+                            <figure class="embedded flex c:center c:middle by:3x2"
+                                    *ngIf="metadata.contentType.startsWith('image')">
+                                <img [src]="image"
+                                     decoding="async"
+                                     loading="lazy"
+                                     [ngClass]="{'invisible': !image}"
+                                     *ngIf="(file.path | fileUrl: 'sm' | async) as image; else imageSpinner">
+                                <ng-template #imageSpinner>
+                                    <m-icon name="spinner" class="f:md"></m-icon>
+                                </ng-template>
+                            </figure>
+                            <article part="body" class="short c:col c:middle p:sm">
+                                <i class="material-icons-outlined f:fade++ mr:sm f:md">
+                                    <ng-container *ngIf="metadata.contentType.startsWith('image')">insert_photo
+                                    </ng-container>
+                                    <ng-container *ngIf="metadata.contentType.startsWith('video')">videocam
+                                    </ng-container>
+                                </i>
+                                <h3 class="f:xxs t-line:1 m:no">{{ file.name }}</h3>
+                            </article>
+                        </m-card>
+                    </ng-container>
+                </ng-container>
+            </div>
+            <!-- list view -->
+            <m-table class="neat axis:x"
+                     *ngIf="localStorage.fileView !== 'grid' && fileService.files.length"
+                     [ngClass]="{'mt': fileService.directories.length }">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="t:left" style="width: 60%" colspan="2"></th>
+                            <th class="t:left t-wrap:no">{{ 'type' | translation }}</th>
+                            <th class="t:right t-wrap:no">{{ 'size' | translation }}</th>
+                            <th class="t:right t-wrap:no">{{ 'created at' | translation }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="!fileService.querying">
+                            <ng-container *ngFor="let file of fileService.files; index as index">
+                                <ng-container
+                                              *ngIf="index < (fileService.page + 1) * 10">
+                                    <tr class="touch"
+                                        *ngIf="file | fileMetadata | async as metadata"
+                                        [ngClass]="{'selected': fileService.selectedFilePaths.has(file.path), 'disabled': !fileService.isAcceptedFile(metadata)}"
+                                        (click)="fileService.selectFile(file)">
+                                        <td class="pr:no fit">
+                                            <figure class="embedded by:1x1 a:top r:xxs inline-flex"
+                                                    style="margin: -.5px 0; width: 20px; height: 20px"
+                                                    *ngIf="metadata.contentType.startsWith('image')">
+                                                <img [src]="image"
+                                                     decoding="async"
+                                                     loading="lazy"
+                                                     *ngIf=" (file.path | fileUrl: 'icon' | async) as image">
+                                            </figure>
+                                            <i class="material-icons-outlined f:fade++ a:top"
+                                               style="line-height: 1.125rem"
+                                               *ngIf="metadata.contentType.startsWith('video')">videocam</i>
+                                        </td>
+                                        <td
+                                            class="f:{{ fileService.selectedFilePaths.has(file.path) && fileService.selectingColor || 'theme' }}">
+                                            <span class="f:500 f:xs">{{ file.name }}</span>
+                                        </td>
+                                        <td class="f:xs f:fade t:left t-wrap:no">
+                                            {{ metadata.contentType }}
+                                        </td>
+                                        <td class="f:xs f:fade t:right t-wrap:no">
+                                            {{ metadata.size | filesize }}
+                                        </td>
+                                        <td class="f:xs f:fade t:right t-wrap:no">
+                                            {{ metadata.createdAt | date: 'yyyy/MM/dd HH:MM' }}
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="fileService.querying">
+                            <tr *ngFor="let item of '-'.repeat(20).split('-')">
+                                <td class="pr:no fit">
+                                    <m-skeleton class="animated" width="24"></m-skeleton>
+                                </td>
+                                <td>
+                                    <m-skeleton class="animated" width="100%"></m-skeleton>
+                                </td>
+                                <td>
+                                    <m-skeleton class="animated" width="100%"></m-skeleton>
+                                </td>
+                                <td>
+                                    <m-skeleton class="animated" width="100%"></m-skeleton>
+                                </td>
+                                <td>
+                                    <m-skeleton class="animated" width="100%"></m-skeleton>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </m-table>
+            <div class="x c:row c:center c:middle f:fade"
+                 style="height: -webkit-fill-available; padding: 10vh 1.25rem"
+                 *ngIf="!fileService.querying && !fileService.directories.length && !fileService.files.length">
+                {{ 'No files or folders here' | translation }}
+            </div>
+        </div>
     </m-content>
     <m-footer class="bottom bt" style="padding: .875rem 1.25rem">
         <div slot="start">
@@ -46,149 +185,6 @@
         </div>
     </m-footer>
 </m-modal>
-
-<ng-template #content>
-    <div class="content p p:lg@sm" style="min-height: 100%"
-         [ngClass]="{'fileService.querying': fileService.querying}">
-        <div class="y" *ngIf="fileService.directories.length">
-            <m-card type="button" class="x:6 x:2.4@sm theme @hover"
-                    [disabled]="fileService.querying"
-                    style="--card-b-width: 1px; --card-b-color: var(--b-fadest)"
-                    (click)="fileService.next(directory)"
-                    [attr.busy]="directory.busy ? '' : null"
-                    *ngFor="let directory of fileService.directories; index as index">
-                <article part="body" class="c:center c:middle" style="padding: .6rem .8rem">
-                    <div class="y:sm c-wrap:no c:middle">
-                        <i class="x material-icons-outlined f:fade++">folder</i>
-                        <h3 class="x:fill f:xs f:500 f:theme" style="line-height: 1.3; word-break: break-word;">
-                            {{ fileService.getFolderTranslation(directory.name) }}
-                        </h3>
-                    </div>
-                    <m-button class="show@hover abs right round xs mr:sm"
-                              *ngIf="(!fileService.directoryPaths.length && fileService.options.allowWriteFolderInRoot || fileService.directoryPaths.length && fileService.options.allowWriteFolder) && !fileService.querying"
-                              (click)="fileService.deleteFolder(directory); $event.stopPropagation()"
-                              style="--button-bg-color-hover: var(--theme-fader)">
-                        <i class="material-icons-outlined f:fade++ f:md">delete</i>
-                    </m-button>
-                </article>
-            </m-card>
-        </div>
-        <div class="y"
-             *ngIf="localStorage.fileView === 'grid' && fileService.files.length"
-             [ngClass]="{'mt:sm': fileService.directories.length}">
-            <ng-container *ngFor="let file of fileService.files; index as index">
-                <ng-container
-                              *ngIf="index < (fileService.page + 1) * 10">
-                    <m-card type="button" class="x:6 x:2.4@sm theme"
-                            [ngStyle]="{'box-shadow': fileService.selectedFilePaths.has(file.path) ? ('0 0 0 3px var(--' + fileService.selectingColor) + ')' : null }"
-                            style="--card-b-width: 1px; --card-b-color: var(--b-fadest)"
-                            (click)="fileService.selectFile(file)"
-                            *ngIf="file | fileMetadata | async as metadata"
-                            [disabled]="!fileService.isAcceptedFile(metadata)">
-                        <figure class="embedded flex c:center c:middle by:3x2"
-                                *ngIf="metadata.contentType.startsWith('image')">
-                            <img [src]="image"
-                                 decoding="async"
-                                 loading="lazy"
-                                 [ngClass]="{'invisible': !image}"
-                                 *ngIf="(file.path | fileUrl: 'sm' | async) as image; else imageSpinner">
-                            <ng-template #imageSpinner>
-                                <m-icon name="spinner" class="f:md"></m-icon>
-                            </ng-template>
-                        </figure>
-                        <article part="body" class="short c:col c:middle p:sm">
-                            <i class="material-icons-outlined f:fade++ mr:sm f:md">
-                                <ng-container *ngIf="metadata.contentType.startsWith('image')">insert_photo
-                                </ng-container>
-                                <ng-container *ngIf="metadata.contentType.startsWith('video')">videocam
-                                </ng-container>
-                            </i>
-                            <h3 class="f:xxs t-line:1 m:no">{{ file.name }}</h3>
-                        </article>
-                    </m-card>
-                </ng-container>
-            </ng-container>
-        </div>
-        <!-- list view -->
-        <m-table class="neat axis:x"
-                 *ngIf="localStorage.fileView !== 'grid' && fileService.files.length"
-                 [ngClass]="{'mt': fileService.directories.length }">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="t:left" style="width: 60%" colspan="2"></th>
-                        <th class="t:left t-wrap:no">{{ 'type' | translation }}</th>
-                        <th class="t:right t-wrap:no">{{ 'size' | translation }}</th>
-                        <th class="t:right t-wrap:no">{{ 'created at' | translation }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <ng-container *ngIf="!fileService.querying">
-                        <ng-container *ngFor="let file of fileService.files; index as index">
-                            <ng-container
-                                          *ngIf="index < (fileService.page + 1) * 10">
-                                <tr class="touch"
-                                    *ngIf="file | fileMetadata | async as metadata"
-                                    [ngClass]="{'selected': fileService.selectedFilePaths.has(file.path), 'disabled': !fileService.isAcceptedFile(metadata)}"
-                                    (click)="fileService.selectFile(file)">
-                                    <td class="pr:no fit">
-                                        <figure class="embedded by:1x1 a:top r:xxs inline-flex"
-                                                style="margin: -.5px 0; width: 20px; height: 20px"
-                                                *ngIf="metadata.contentType.startsWith('image')">
-                                            <img [src]="image"
-                                                 decoding="async"
-                                                 loading="lazy"
-                                                 *ngIf=" (file.path | fileUrl: 'icon' | async) as image">
-                                        </figure>
-                                        <i class="material-icons-outlined f:fade++ a:top" style="line-height: 1.125rem"
-                                           *ngIf="metadata.contentType.startsWith('video')">videocam</i>
-                                    </td>
-                                    <td
-                                        class="f:{{ fileService.selectedFilePaths.has(file.path) && fileService.selectingColor || 'theme' }}">
-                                        <span class="f:500 f:xs">{{ file.name }}</span>
-                                    </td>
-                                    <td class="f:xs f:fade t:left t-wrap:no">
-                                        {{ metadata.contentType }}
-                                    </td>
-                                    <td class="f:xs f:fade t:right t-wrap:no">
-                                        {{ metadata.size | filesize }}
-                                    </td>
-                                    <td class="f:xs f:fade t:right t-wrap:no">
-                                        {{ metadata.createdAt | date: 'yyyy/MM/dd HH:MM' }}
-                                    </td>
-                                </tr>
-                            </ng-container>
-                        </ng-container>
-                    </ng-container>
-                    <ng-container *ngIf="fileService.querying">
-                        <tr *ngFor="let item of '-'.repeat(20).split('-')">
-                            <td class="pr:no fit">
-                                <m-skeleton class="animated" width="24"></m-skeleton>
-                            </td>
-                            <td>
-                                <m-skeleton class="animated" width="100%"></m-skeleton>
-                            </td>
-                            <td>
-                                <m-skeleton class="animated" width="100%"></m-skeleton>
-                            </td>
-                            <td>
-                                <m-skeleton class="animated" width="100%"></m-skeleton>
-                            </td>
-                            <td>
-                                <m-skeleton class="animated" width="100%"></m-skeleton>
-                            </td>
-                        </tr>
-                    </ng-container>
-                </tbody>
-            </table>
-        </m-table>
-        <div class="x c:row c:center c:middle f:fade"
-             style="height: -webkit-fill-available; padding: 10vh 1.25rem"
-             *ngIf="!fileService.querying && !fileService.directories.length && !fileService.files.length">
-            {{ 'No files or folders here' | translation }}
-        </div>
-    </div>
-</ng-template>
 
 <ng-template #tasks>
     <h4 toggle-content="#tasks" class="c:middle touch" *ngIf="fileService.tasks.length">

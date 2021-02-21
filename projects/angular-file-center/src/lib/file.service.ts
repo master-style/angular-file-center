@@ -157,14 +157,10 @@ export class FileService {
 
     async list(directoryPath?) {
         this.querying = true;
-
         const list = await this.handler.list(directoryPath);
-
         this.directories = list.folders;
         this.files = list.files;
-
         this.page = 0;
-
         this.querying = false;
     }
 
