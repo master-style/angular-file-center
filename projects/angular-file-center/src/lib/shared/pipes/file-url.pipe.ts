@@ -5,11 +5,14 @@ import { FileService } from '../../file.service';
     name: 'fileUrl'
 })
 export class FileUrlPipe implements PipeTransform {
-    constructor (
+    constructor(
         private fileService: FileService
-    ) {}
+    ) { }
 
-    transform(fullPath: string, ...args: unknown[]): Promise<string> {
+    async transform(fullPath: string, ...args: unknown[]): Promise<string> {
+        if (!fullPath) {
+            return '';
+        }
         const sizeName = args[0];
         if (sizeName) {
             const lastSlashIndex = fullPath.lastIndexOf('/');
@@ -17,6 +20,6 @@ export class FileUrlPipe implements PipeTransform {
             const fileName = fullPath.substr(lastSlashIndex !== -1 ? lastSlashIndex + 1 : 0, fullPath.length);
             fullPath = dirPath + '/.@' + sizeName + '/' + fileName;
         }
-        return this.fileService.handler.getDownloadURL(fullPath);
+        return await this.fileService.handler.getDownloadURL(fullPath);
     }
 }
