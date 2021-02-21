@@ -46,7 +46,7 @@ const DEFAULT_OPTIONS = {
     allowWriteFolder: true,
     allowWriteFolderInRoot: true,
     accept: '',
-    multiple: true
+    multiple: false
 }
 
 export interface Handler {
