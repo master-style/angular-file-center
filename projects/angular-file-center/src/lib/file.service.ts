@@ -58,7 +58,7 @@ export interface Handler {
     onUpload?: () => Promise<void>,
     onUploaded?: () => Promise<void>,
     getDownloadURL: (filePath: string) => Promise<string>,
-    getMetadata: (filePath: string) => Promise<MetadataResult>
+    getMetadata: (file: IFile) => Promise<MetadataResult>
 }
 
 export interface FileOptions {

@@ -1,4 +1,4 @@
-import { Handler, IFolder } from '../../file.service';
+import { Handler, IFile, IFolder } from '../../file.service';
 
 export function getHandlerFromFirebaseStorage(storage) {
     return {
@@ -63,8 +63,8 @@ export function getHandlerFromFirebaseStorage(storage) {
         getDownloadURL: (filePath: string) => {
             return storage.ref(filePath).getDownloadURL();
         },
-        getMetadata: async (filePath: string) => {
-            const metadata = await storage.ref(filePath).getMetadata();
+        getMetadata: async (file: IFile) => {
+            const metadata = await storage.ref(file.path).getMetadata();
             return {
                 name: metadata.name,
                 contentType: metadata.contentType,
