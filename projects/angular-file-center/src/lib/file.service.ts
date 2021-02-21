@@ -151,7 +151,7 @@ export class FileService {
         this.target = target;
         this.targetKey = targetKey;
         this.options = merge(this.options, options);
-        this.router.navigateByUrl(this.router.url + '/' + routerLink.join('/'))
+        this.router.navigate([this.router.url, ...routerLink])
     }
 
     reset() {
