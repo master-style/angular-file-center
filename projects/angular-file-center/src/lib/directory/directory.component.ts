@@ -12,9 +12,10 @@ export class DirectoryComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private fileService: FileService
-    ) { }
+    ) {}
 
     ngOnInit(): void {
+        console.log('DIRECTORY');
         this.fileService.onDirectoryChanged.next(this.route);
     }
 }

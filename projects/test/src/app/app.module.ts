@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { FileModule } from 'projects/angular-file-center/src/public-api';
 import { AppComponent } from './app.component';
-
-import { FileModule } from '../../../angular-file-center/src/public-api';
+import { RoutingModule } from './app.routing.module';
 
 @NgModule({
     declarations: [
@@ -11,9 +10,10 @@ import { FileModule } from '../../../angular-file-center/src/public-api';
     ],
     imports: [
         BrowserModule,
-        FileModule.forRoot()
+        FileModule.forRoot(),
+        RoutingModule
     ],
-    providers: [],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    schemas: []
 })
 export class AppModule { }

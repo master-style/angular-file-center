@@ -437,7 +437,7 @@ export class FileService {
     }
 
     back() {
-        this.router.navigate(['../'], { relativeTo: this.route.parent })
+        this.router.navigate(['../'], { relativeTo: this.route })
     }
 
     async canDeactivate(
