@@ -56,6 +56,4 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
         this.subscriptions.forEach((eachSubscriptions) => eachSubscriptions.unsubscribe());
         this.fileService.clear();
     }
-
-
 }
