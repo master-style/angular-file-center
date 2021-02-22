@@ -5,7 +5,7 @@ import { FileService } from './file.service';
 
 export const routes: Routes = [
     {
-        path: '',
+        path: 'file',
         component: FileComponent,
         canDeactivate: [FileService],
         children: [
