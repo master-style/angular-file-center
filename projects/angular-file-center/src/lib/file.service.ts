@@ -418,9 +418,12 @@ export class FileService {
                 : ['./'],
             { relativeTo: this.route });
 
-        if (!paths.length) {
-            this.onDirectoryChanged.next(null);
+        let route = this.route;
+        for (let i = 0; i < paths.length; i++) {
+            route = route.firstChild.firstChild;
         }
+
+        this.onDirectoryChanged.next(route);
     }
 
     async apply() {
