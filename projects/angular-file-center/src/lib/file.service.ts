@@ -403,7 +403,9 @@ export class FileService {
     }
 
     async next(directory) {
-        this.router.navigate(['./', directory.name], { relativeTo: this.directoryRoute ?? this.route });
+        await this.router.navigate(['./', directory.name], { relativeTo: this.directoryRoute ?? this.route });
+
+        this.onDirectoryChanged.next(this.directoryRoute.firstChild.firstChild);
     }
 
     async go(directoryPath?) {
