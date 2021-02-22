@@ -148,12 +148,11 @@ export class FileService {
         return isAcceptedFile(metadata, this.options.accept);
     }
 
-    select(target: any, targetKey: string, routerLink: string[], options: FileOptions) {
+    select(target: any, targetKey: string, options: FileOptions) {
         this.target = target;
         this.targetKey = targetKey;
         this.mode = 'select';
         this.options = merge(this.options, options);
-        this.router.navigate(routerLink, { relativeTo: this.route })
     }
 
     async list(directoryPath?) {
