@@ -42,8 +42,11 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
                 })
         );
 
-        if (!this.route.snapshot.firstChild) {
-            this.fileService.onDirectoryChanged.next(null);
+        for (let nowRoute = this.route; ;nowRoute = nowRoute.firstChild.firstChild) {
+            if (!nowRoute.firstChild) {
+                this.fileService.onDirectoryChanged.next(nowRoute);
+                break;
+            }
         }
     }
 

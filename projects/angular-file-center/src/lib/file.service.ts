@@ -403,7 +403,9 @@ export class FileService {
     }
 
     async next(directory) {
-        this.router.navigate(['./', directory.name], { relativeTo: this.directoryRoute ?? this.route });
+        await this.router.navigate(['./', directory.name], { relativeTo: this.directoryRoute ?? this.route });
+
+        this.onDirectoryChanged.next(this.directoryRoute.firstChild.firstChild);
     }
 
     async go(directoryPath?) {
@@ -418,9 +420,12 @@ export class FileService {
                 : ['./'],
             { relativeTo: this.route });
 
-        if (!paths.length) {
-            this.onDirectoryChanged.next(null);
+        let route = this.route;
+        for (let i = 0; i < paths.length; i++) {
+            route = route.firstChild.firstChild;
         }
+
+        this.onDirectoryChanged.next(route);
     }
 
     async apply() {

@@ -1,20 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { FileService } from '../file.service';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-directory',
     templateUrl: './directory.component.html',
     styleUrls: ['./directory.component.scss']
 })
-export class DirectoryComponent implements OnInit {
+export class DirectoryComponent {
 
-    constructor(
-        private route: ActivatedRoute,
-        private fileService: FileService
-    ) {}
-
-    ngOnInit(): void {
-        this.fileService.onDirectoryChanged.next(this.route);
-    }
 }
