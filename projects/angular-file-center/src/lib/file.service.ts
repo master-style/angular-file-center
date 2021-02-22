@@ -153,7 +153,7 @@ export class FileService {
         this.targetKey = targetKey;
         this.mode = 'select';
         this.options = merge(this.options, options);
-        this.router.navigate([this.router.url, ...routerLink])
+        this.router.navigate(routerLink)
     }
 
     async list(directoryPath?) {
