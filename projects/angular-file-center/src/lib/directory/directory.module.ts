@@ -6,10 +6,10 @@ import { DirectoryComponent } from './directory.component';
 
 
 @NgModule({
-  declarations: [DirectoryComponent],
-  imports: [
-    CommonModule,
-    DirectoryRoutingModule
-  ]
+    declarations: [DirectoryComponent],
+    imports: [
+        CommonModule,
+        DirectoryRoutingModule
+    ]
 })
 export class DirectoryModule { }

@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FileService } from './file.service';
 
 @Component({
@@ -33,11 +33,11 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
 
                     const directoryPaths = [];
                     for (let nowRoute = activatedRoute; nowRoute && nowRoute !== this.route; nowRoute = nowRoute.parent.parent) {
+                        if (this.route === nowRoute || nowRoute.firstChild === nowRoute)
+                            break;
+
                         directoryPaths.unshift(decodeURIComponent(nowRoute.params['_value']['id']));
                     }
-
-                    if (directoryPaths.length && activatedRoute === null)
-                        return;
 
                     await this.fileService.list(directoryPaths.join('/'));
 
