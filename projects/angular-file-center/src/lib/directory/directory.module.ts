@@ -6,7 +6,9 @@ import { DirectoryComponent } from './directory.component';
 
 
 @NgModule({
-    declarations: [DirectoryComponent],
+    declarations: [
+        DirectoryComponent
+    ],
     imports: [
         CommonModule,
         DirectoryRoutingModule

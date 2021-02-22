@@ -15,7 +15,7 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
         public fileService: FileService,
         public location: Location,
         public router: Router
-    ) { }
+    ) {}
 
     @ViewChild('modal') modalRef: ElementRef<any>;
     @ViewChild('content') contentRef: ElementRef<any>;

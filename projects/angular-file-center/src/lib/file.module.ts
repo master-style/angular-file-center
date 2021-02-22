@@ -6,7 +6,7 @@ import { FileUrlPipe } from './shared/pipes/file-url.pipe';
 import { FileOptions, FileService, FILE_OPTIONS } from './file.service';
 import { TranslationPipe } from './shared/pipes/translation.pipe';
 import { FileMetadataPipe } from './shared/pipes/file-metadata.pipe';
-import { FileRoutingModule } from './file.routing.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
     declarations: [
@@ -18,7 +18,7 @@ import { FileRoutingModule } from './file.routing.module';
     imports: [
         CommonModule,
         NgxFilesizeModule,
-        FileRoutingModule
+        RouterModule
     ],
     exports: [
         FileUrlPipe,
