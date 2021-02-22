@@ -3,7 +3,7 @@
  */
 
 export * from './lib/file.service';
-export * from './lib/file.routing.module';
+export * from './lib/file.routes';
 export * from './lib/file.module';
 export * from './lib/file.component';
 export * from './lib/directory/directory-routing.module';

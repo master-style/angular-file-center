@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FileComponent } from './file.component';
 import { FileService } from './file.service';
 
-const routes: Routes = [
+export const routes: Routes = [
     {
         path: '',
         component: FileComponent,
@@ -16,9 +16,3 @@ const routes: Routes = [
         ]
     }
 ];
-
-@NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule],
-})
-export class FileRoutingModule { }

@@ -1,7 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FileComponent } from './file.component';
-import { FileRoutingModule } from './file.routing.module';
 import { NgxFilesizeModule } from 'ngx-filesize';
 import { FileUrlPipe } from './shared/pipes/file-url.pipe';
 import { FileOptions, FileService, FILE_OPTIONS } from './file.service';
@@ -17,13 +16,13 @@ import { FileMetadataPipe } from './shared/pipes/file-metadata.pipe';
     ],
     imports: [
         CommonModule,
-        FileRoutingModule,
         NgxFilesizeModule
     ],
     exports: [
         CommonModule,
         FileUrlPipe,
-        FileMetadataPipe
+        FileMetadataPipe,
+        FileComponent
     ],
     schemas: [
         CUSTOM_ELEMENTS_SCHEMA
