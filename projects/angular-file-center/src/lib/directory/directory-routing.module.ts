@@ -4,19 +4,19 @@ import { DirectoryComponent } from './directory.component';
 
 const routes: Routes = [
     {
-        path: 'CCC',
+        path: '',
         component: DirectoryComponent,
         children: [
-            // {
-            //     path: ':id',
-            //     loadChildren: () => import('./directory.module').then(m => m.DirectoryModule)
-            // }
+            {
+                path: ':id',
+                loadChildren: () => import('./directory.module').then(m => m.DirectoryModule)
+            }
         ]
-    },
+    }
 ];
 
 @NgModule({
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class DirectoryRoutingModule { }
+export class DirectoryRoutingModule {}

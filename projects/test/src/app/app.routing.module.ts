@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { fileRoute } from 'projects/angular-file-center/src/public-api';
 
-const routes: Routes = [
-    fileRoute
-];
+const routes: Routes = [];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],

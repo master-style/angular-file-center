@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { environment } from '../environments/environment';
 import firebase from 'firebase/app';
 import 'firebase/storage';
-import { FileService, getHandlerFromFirebaseStorage } from 'projects/angular-file-center/src/public-api';
+import { FileService } from 'projects/angular-file-center/src/lib/file.service';
+import { getHandlerFromFirebaseStorage } from 'projects/angular-file-center/src/lib/shared/utils/get-handler-from-firebase-storage';
 
 @Component({
     selector: 'app-root',

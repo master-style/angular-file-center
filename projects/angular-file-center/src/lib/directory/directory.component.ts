@@ -15,7 +15,6 @@ export class DirectoryComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        console.log('DIRECTORY');
         this.fileService.onDirectoryChanged.next(this.route);
     }
 }

@@ -33,9 +33,6 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
 
                     const directoryPaths = [];
                     for (let nowRoute = activatedRoute; nowRoute && nowRoute !== this.route; nowRoute = nowRoute.parent.parent) {
-                        if (this.route === nowRoute || nowRoute.firstChild === nowRoute)
-                            break;
-
                         directoryPaths.unshift(decodeURIComponent(nowRoute.params['_value']['id']));
                     }
 

@@ -12,4 +12,4 @@ import { DirectoryComponent } from './directory.component';
         DirectoryRoutingModule
     ]
 })
-export class DirectoryModule { }
+export class DirectoryModule {}
