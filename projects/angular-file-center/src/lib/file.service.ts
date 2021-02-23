@@ -108,7 +108,7 @@ export class FileService {
     page = 0;
     files = [];
     querying = true;
-    uploading = '';
+    processing = '';
     deleting = false;
     contentRef: ElementRef<any>;
 
@@ -194,6 +194,7 @@ export class FileService {
     }
 
     async deleteFiles() {
+
         try {
             dialog({
                 title: '確定刪除？',
@@ -333,7 +334,7 @@ export class FileService {
     async upload(event) {
         const files = Array.from(event.target.files);
 
-        this.uploading = 'uploading';
+        this.processing = 'processing';
 
         await this.handler.onUpload?.();
 
@@ -388,13 +389,13 @@ export class FileService {
                 })
         );
 
-        this.uploading = 'uploaded';
+        this.processing = 'uploaded';
 
         await this.handler.onUploaded?.();
 
         await this.list(this.directoryPaths.join('/'));
 
-        this.uploading = '';
+        this.processing = '';
     }
 
     private async addStorageTask(task: Task) {

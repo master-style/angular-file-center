@@ -290,7 +290,7 @@
                 </m-button>
                 <m-button class="x xs outlined"
                           [disabled]="!fileService.directoryPaths.length && !fileService.querying"
-                          [attr.busy]="fileService.uploading ? '' : null">
+                          [attr.busy]="fileService.processing ? '' : null">
                     <i class="material-icons-outlined f:fade++ f:md" part="head">upload</i>
                     {{ 'file' | translation }}
                     <label class="abs w:full h:full touch">
@@ -304,7 +304,7 @@
                 </m-button>
                 <m-button class="x xs outlined"
                           [disabled]="!fileService.directoryPaths.length && !fileService.querying"
-                          [attr.busy]="fileService.uploading ? '' : null">
+                          [attr.busy]="fileService.processing ? '' : null">
                     <i class="material-icons-outlined f:fade++ f:md" part="head">upload</i>
                     {{ 'folder' | translation }}
                     <label class="abs w:full h:full touch">
@@ -319,8 +319,8 @@
                     <i class="material-icons-outlined f:fade++ f:md" part="head">create_new_folder</i>
                     {{ 'Create Folder' | translation }}
                 </m-button>
-                <div class="x c:middle" *ngIf="fileService.uploading">
-                    <p class="remark t-line:1 m:no">{{ fileInput.files.length }} {{ 'files' | translation }} {{ fileService.uploading | translation }}...</p>
+                <div class="x c:middle" *ngIf="fileService.processing">
+                    <p class="remark t-line:1 m:no">{{ fileInput.files.length }} {{ 'files' | translation }} {{ fileService.processing | translation }}...</p>
                 </div>
             </div>
         </div>
