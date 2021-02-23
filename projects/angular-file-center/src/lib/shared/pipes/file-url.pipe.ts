@@ -2,8 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { FileService } from '../../file.service';
 
 @Pipe({
-    name: 'fileUrl',
-    pure: false
+    name: 'fileUrl'
 })
 export class FileUrlPipe implements PipeTransform {
     constructor(
