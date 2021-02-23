@@ -159,8 +159,8 @@ export class FileService {
         this.querying = true;
         const list = await this.handler.list(directoryPath);
         this.contentRef?.nativeElement.reset();
-        this.directories = list.folders;
-        this.files = list.files;
+        this.directories = list.folders.filter((eachFolder) => !eachFolder.name.startsWith('.'));
+        this.files = list.files.filter((eachFile) => eachFile.name !== '.');
         this.querying = false;
     }
 
@@ -331,12 +331,14 @@ export class FileService {
     }
 
     async upload(event) {
-        const files = event.target.files;
+        const files = Array.from(event.target.files);
+
+        this.uploading = 'uploading';
 
         await this.handler.onUpload?.();
 
         await Promise.all(
-            Array.from(files)
+            files
                 .map(async (file: File) => {
                     const task: Task = {
                         type: file.type.split('/')[0],
@@ -386,9 +388,13 @@ export class FileService {
                 })
         );
 
+        this.uploading = 'uploaded';
+
         await this.handler.onUploaded?.();
 
         await this.list(this.directoryPaths.join('/'));
+
+        this.uploading = '';
     }
 
     private async addStorageTask(task: Task) {

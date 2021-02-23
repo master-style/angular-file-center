@@ -20,6 +20,16 @@
             </nav>
             <m-icon class="x" name="spinner" *ngIf="fileService.querying"></m-icon>
         </div>
+        <div class="y:sm" slot="end">
+            <m-button class="x xs square" (click)="localStorage.fileView = 'grid'"
+                      [ngClass]="{'f:fade++': localStorage.fileView !== 'grid'}">
+                <i class="material-icons-outlined">view_module</i>
+            </m-button>
+            <m-button class="x xs square" (click)="localStorage.fileView = ''"
+                      [ngClass]="{'f:fade++': localStorage.fileView}">
+                <i class="material-icons-outlined">view_list</i>
+            </m-button>
+        </div>
     </m-header>
     <m-content scroll-y
                emit
@@ -107,7 +117,7 @@
                                         (click)="fileService.selectFile(file)">
                                         <td class="pr:no fit">
                                             <figure class="embedded by:1x1 a:top r:xxs inline-flex"
-                                                    style="margin: -.5px 0; width: 20px; height: 20px"
+                                                    style="margin: -5px 0; width: 30px; height: 30px"
                                                     *ngIf="metadata.contentType.startsWith('image')">
                                                 <img [src]="image"
                                                      decoding="async"
@@ -285,6 +295,7 @@
                     {{ 'file' | translation }}
                     <label class="abs w:full h:full touch">
                         <input type="file"
+                               #fileInput
                                [accept]="fileService.options.accept"
                                multiple
                                (change)="fileService.upload($event)"
@@ -309,21 +320,8 @@
                     {{ 'Create Folder' | translation }}
                 </m-button>
                 <div class="x c:middle" *ngIf="fileService.uploading">
-                    <p class="remark t-line:1">{{ 'fileService.Uploading' | translation }}... {{ fileService.uploading
-                        }}</p>
+                    <p class="remark t-line:1 m:no">{{ fileInput.files.length }} {{ 'files' | translation }} {{ fileService.uploading | translation }}...</p>
                 </div>
-            </div>
-        </div>
-        <div class="x">
-            <div class="y:sm">
-                <m-button class="x xs square" (click)="localStorage.fileView = ''"
-                          [ngClass]="{'f:fade++': localStorage.fileView}">
-                    <i class="material-icons-outlined">view_list</i>
-                </m-button>
-                <m-button class="x xs square" (click)="localStorage.fileView = 'grid'"
-                          [ngClass]="{'f:fade++': localStorage.fileView !== 'grid'}">
-                    <i class="material-icons-outlined">view_module</i>
-                </m-button>
             </div>
         </div>
     </div>
