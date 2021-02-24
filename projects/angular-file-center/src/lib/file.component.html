@@ -3,7 +3,7 @@
          emit
          class="full"
          (close)="fileService.back()"
-         style="--modal-max-width: var(--wrap-lg); --modal-offset-bottom: 69px; --modal-offset-top: 3rem" hidden>
+         style="--modal-max-width: var(--wrap-lg); --modal-offset-bottom: 61px; --modal-offset-top: 3rem" hidden>
     <m-header class="px bb">
         <div class="y:sm c:middle" slot="start">
             <nav class="x" aria-label="breadcrumb">
@@ -38,7 +38,7 @@
              [ngClass]="{'fileService.querying': fileService.querying}">
             <div class="y" *ngIf="fileService.directories.length">
                 <m-card type="button" class="x:6 x:2.4@sm theme @hover"
-                        [disabled]="fileService.querying"
+                        [attr.disabled]="fileService.querying ? '' : null"
                         style="--card-b-width: 1px; --card-b-color: var(--b-fadest)"
                         (click)="fileService.next(directory)"
                         [attr.busy]="directory.busy ? '' : null"
@@ -69,7 +69,7 @@
                                 style="--card-b-width: 1px; --card-b-color: var(--b-fadest)"
                                 (click)="fileService.selectFile(file)"
                                 *ngIf="file | fileMetadata | async as metadata"
-                                [disabled]="!fileService.isAcceptedFile(metadata)">
+                                [attr.disabled]="!fileService.isAcceptedFile(metadata) ? '' : null">
                             <figure class="embedded flex c:center c:middle by:3x2"
                                     *ngIf="metadata.contentType.startsWith('image')">
                                 <img [src]="image"
@@ -101,10 +101,11 @@
                 <table>
                     <thead>
                         <tr>
-                            <th class="t:left" style="width: 60%" colspan="2"></th>
-                            <th class="t:left t-wrap:no">{{ 'type' | translation }}</th>
-                            <th class="t:right t-wrap:no">{{ 'size' | translation }}</th>
-                            <th class="t:right t-wrap:no">{{ 'created at' | translation }}</th>
+                            <th class="t:left sticky bg:theme" style="width: 60%" colspan="2">{{ 'name' | translation }}
+                            </th>
+                            <th class="t:left t-wrap:no sticky bg:theme">{{ 'type' | translation }}</th>
+                            <th class="t:right t-wrap:no sticky bg:theme">{{ 'size' | translation }}</th>
+                            <th class="t:right t-wrap:no sticky bg:theme">{{ 'created at' | translation }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -185,7 +186,7 @@
             <m-button class="x xs blue"
                       *ngIf="fileService.mode === 'select'"
                       (click)="fileService.apply()"
-                      [disabled]="!fileService.selectedFilePaths.size">
+                      [attr.disabled]="!fileService.selectedFilePaths.size ? '' : null">
                 {{ 'select' | translation }} <ng-container *ngIf="fileService.options.multiple">{{
                     fileService.selectedFilePaths.size }}
                 </ng-container>
@@ -289,7 +290,7 @@
                         {{ fileService.selectedFilePaths.size }}</ng-container>
                 </m-button>
                 <m-button class="x xs outlined"
-                          [disabled]="!fileService.directoryPaths.length && !fileService.querying"
+                          [attr.disabled]="!fileService.directoryPaths.length ? '' : null"
                           [attr.busy]="fileService.processing ? '' : null">
                     <i class="material-icons-outlined f:fade++ f:md" part="head">upload</i>
                     {{ 'file' | translation }}
@@ -303,12 +304,12 @@
                     </label>
                 </m-button>
                 <m-button class="x xs outlined"
-                          [disabled]="!fileService.directoryPaths.length && !fileService.querying"
                           [attr.busy]="fileService.processing ? '' : null">
                     <i class="material-icons-outlined f:fade++ f:md" part="head">upload</i>
                     {{ 'folder' | translation }}
                     <label class="abs w:full h:full touch">
-                        <input type="file" webkitdirectory mozdirectory [accept]="fileService.options.accept" multiple
+                        <input #folderInput
+                               type="file" webkitdirectory mozdirectory [accept]="fileService.options.accept" multiple
                                (change)="fileService.upload($event)"
                                style="opacity: 0; pointer-events: none;">
                     </label>
@@ -320,7 +321,8 @@
                     {{ 'Create Folder' | translation }}
                 </m-button>
                 <div class="x c:middle" *ngIf="fileService.processing">
-                    <p class="remark t-line:1 m:no">{{ fileInput.files.length }} {{ 'files' | translation }} {{ fileService.processing | translation }}...</p>
+                    <p class="remark t-line:1 m:no">{{ fileInput.files.length || folderInput.files.length }} {{ 'files' | translation }} {{
+                        fileService.processing | translation }} ...</p>
                 </div>
             </div>
         </div>
