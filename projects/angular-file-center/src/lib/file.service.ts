@@ -160,10 +160,10 @@ export class FileService {
         this.querying = true;
         this.contentRef?.nativeElement.reset();
         const list = await this.handler.list(directoryPath);
+        this.directories = list.folders.filter((eachFolder) => !eachFolder.name.startsWith('.'));
+        this.files = list.files.filter((eachFile) => eachFile.name !== '.');
+        this.querying = false;
         this.zone.run(() => {
-            this.directories = list.folders.filter((eachFolder) => !eachFolder.name.startsWith('.'));
-            this.files = list.files.filter((eachFile) => eachFile.name !== '.');
-            this.querying = false;
             this.changeDetectorRef.markForCheck();
         });
     }
