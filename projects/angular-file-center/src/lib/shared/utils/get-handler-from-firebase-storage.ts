@@ -25,14 +25,14 @@ export function getHandlerFromFirebaseStorage(storage) {
         deleteFolder: async (folder: IFolder) => {
             const items = [];
             await (async function deleteDeep(eachFolder) {
-                const list = await eachFolder.source.listAll();
+                const list = await eachFolder.listAll();
                 for (const item of list.items) {
                     items.push(item);
                 }
                 for (const prefix of list.prefixes) {
                     await deleteDeep(prefix);
                 }
-            })(folder);
+            })(folder.source);
             await Promise.all(items.map(async (eachItem) => await eachItem.delete()));
         },
         deleteFile: async (filePath: string) => {
