@@ -1,12 +1,13 @@
 import { Location } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileService } from './file.service';
 
 @Component({
     selector: 'app-file',
     templateUrl: './file.component.html',
-    styleUrls: ['./file.component.scss']
+    styleUrls: ['./file.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -14,12 +15,16 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
         public route: ActivatedRoute,
         public fileService: FileService,
         public location: Location,
-        public router: Router
-    ) {}
+        public router: Router,
+        public changeDetectorRef: ChangeDetectorRef
+    ) {
+        this.fileService.changeDetectorRef = changeDetectorRef;
+    }
 
     @ViewChild('modal') modalRef: ElementRef<any>;
     @ViewChild('content') contentRef: ElementRef<any>;
 
+    page = 0;
     localStorage = localStorage;
     subscriptions = [];
 
@@ -42,7 +47,7 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
                 })
         );
 
-        for (let nowRoute = this.route; ;nowRoute = nowRoute.firstChild.firstChild) {
+        for (let nowRoute = this.route; ; nowRoute = nowRoute.firstChild.firstChild) {
             if (!nowRoute.firstChild) {
                 this.fileService.onDirectoryChanged.next(nowRoute);
                 break;

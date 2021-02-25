@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { ElementRef, Inject, Injectable, InjectionToken } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, Inject, Injectable, InjectionToken, NgZone } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import cloneDeep from 'lodash-es/cloneDeep';
@@ -92,11 +92,13 @@ export class FileService {
     constructor(
         private router: Router,
         @Inject(FILE_OPTIONS) public options: FileOptions,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        private zone: NgZone
     ) {
         this.options = merge(DEFAULT_OPTIONS, options);
     }
 
+    changeDetectorRef: ChangeDetectorRef;
     handler: Handler;
     route: ActivatedRoute;
     tasks = [];
@@ -162,6 +164,9 @@ export class FileService {
         this.directories = list.folders.filter((eachFolder) => !eachFolder.name.startsWith('.'));
         this.files = list.files.filter((eachFile) => eachFile.name !== '.');
         this.querying = false;
+        this.zone.run(() => {
+            this.changeDetectorRef.markForCheck();
+        });
     }
 
     clear() {
@@ -193,59 +198,54 @@ export class FileService {
         }
     }
 
-    async deleteFiles() {
+    deleteFiles() {
+        dialog({
+            title: '確定刪除？',
+            text: '選取的' + ' ' + this.selectedFilePaths.size + ' ' + '個項目刪除後便無法復原',
+            type: 'error',
+            onAccept: async () => {
+                try {
+                    this.deleting = true;
+                    const promises: Promise<void>[] = [];
 
-        try {
-            dialog({
-                title: '確定刪除？',
-                text: '選取的' + ' ' + this.selectedFilePaths.size + ' ' + '個項目刪除後便無法復原',
-                type: 'error',
-                onAccept: async () => {
-                    try {
-                        this.deleting = true;
-                        const promises: Promise<void>[] = [];
-
-                        for (const eachFile of this.selectedFiles as any[]) {
-                            if (isImageFileName(eachFile.name)) {
-                                const imageSizes = this.imageSizes;
-                                // tslint:disable-next-line: forin
-                                for (const eachSizeName in imageSizes) {
-                                    let path = eachFile.path;
-                                    if (eachSizeName !== 'origin') {
-                                        const dirPath = eachFile.path.replace(eachFile.name, '');
-                                        path = dirPath + '.@' + eachSizeName + '/' + eachFile.name;
-                                    }
-                                    promises.push(this.handler.deleteFile(path));
+                    for (const eachFile of this.selectedFiles as any[]) {
+                        if (isImageFileName(eachFile.name)) {
+                            const imageSizes = this.imageSizes;
+                            // tslint:disable-next-line: forin
+                            for (const eachSizeName in imageSizes) {
+                                let path = eachFile.path;
+                                if (eachSizeName !== 'origin') {
+                                    const dirPath = eachFile.path.replace(eachFile.name, '');
+                                    path = dirPath + '.@' + eachSizeName + '/' + eachFile.name;
                                 }
-                            } else {
-                                promises.push(this.handler.deleteFile(eachFile.path));
+                                promises.push(this.handler.deleteFile(path));
                             }
+                        } else {
+                            promises.push(this.handler.deleteFile(eachFile.path));
                         }
-
-                        await Promise.all(promises);
-                    } catch (error) {
-                        console.log(error);
                     }
 
-                    this.selectedFiles = [];
-                    this.selectedFilePaths.clear();
-                    await this.list(this.directoryPaths.join('/'));
-                    this.deleting = false;
-                    return true;
-                },
-                acceptButton: {
-                    type: 'submit',
-                    style: '--button-f-color: var(--f-red)',
-                    $text: this.getTranslation('delete'),
-                },
-                cancelButton: {
-                    $if: true,
-                    $text: this.getTranslation('cancel')
-                },
-            });
-        } catch {
-            this.deleting = false;
-        }
+                    await Promise.all(promises);
+                } catch (error) {
+                    console.log(error);
+                }
+
+                this.selectedFiles = [];
+                this.selectedFilePaths.clear();
+                this.deleting = false;
+                this.list(this.directoryPaths.join('/'));
+                return true;
+            },
+            acceptButton: {
+                type: 'submit',
+                style: '--button-f-color: var(--f-red)',
+                $text: this.getTranslation('delete'),
+            },
+            cancelButton: {
+                $if: true,
+                $text: this.getTranslation('cancel')
+            },
+        });
     }
 
     // storage 無建立資料夾 api，只能透過 add 與 delete 來間接創建
@@ -298,44 +298,37 @@ export class FileService {
     }
 
     async deleteFolder(directory) {
-        try {
-            dialog({
-                title: this.getTranslation('Confirm deletion ?'),
-                text: this.getTranslation('The files in the {0} folder will be deleted and cannot be recovered').replace('{0}', directory.name),
-                type: 'error',
-                onAccept: async () => {
-                    try {
-                        directory.busy = true;
+        dialog({
+            title: this.getTranslation('Confirm deletion ?'),
+            text: this.getTranslation('The files in the {0} folder will be deleted and cannot be recovered').replace('{0}', directory.name),
+            type: 'error',
+            onAccept: async () => {
+                try {
+                    directory.busy = true;
+                    await this.handler.deleteFolder(directory);
+                    await this.list(this.directoryPaths.join('/'));
+                    directory.busy = false;
+                } catch (error) {
+                    console.log(error);
+                }
 
-                        await this.handler.deleteFolder(directory);
-
-                        await this.list(this.directoryPaths.join('/'));
-                    } catch (error) {
-                        console.log(error);
-                    }
-
-                    return true;
-                },
-                acceptButton: {
-                    type: 'submit',
-                    style: '--button-f-color: var(--f-red)',
-                    $text: this.getTranslation('delete'),
-                },
-                cancelButton: {
-                    $if: true,
-                    $text: this.getTranslation('cancel')
-                },
-            });
-        } catch {
-            directory.busy = false;
-        }
+                return true;
+            },
+            acceptButton: {
+                type: 'submit',
+                style: '--button-f-color: var(--f-red)',
+                $text: this.getTranslation('delete'),
+            },
+            cancelButton: {
+                $if: true,
+                $text: this.getTranslation('cancel')
+            },
+        });
     }
 
     async upload(event) {
         const files = Array.from(event.target.files);
-
         this.processing = 'processing';
-
         await this.handler.onUpload?.();
 
         await Promise.all(
@@ -390,11 +383,8 @@ export class FileService {
         );
 
         this.processing = 'uploaded';
-
         await this.handler.onUploaded?.();
-
         await this.list(this.directoryPaths.join('/'));
-
         this.processing = '';
     }
 
