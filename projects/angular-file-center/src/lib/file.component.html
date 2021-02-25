@@ -33,7 +33,7 @@
     </m-header>
     <m-content scroll-y
                emit
-               (more)="page = content.page"
+               (more)="changeDetectorRef.markForCheck()"
                #content>
         <div class="content p p:lg@sm"
              [ngClass]="{'fileService.querying': fileService.querying}">
@@ -64,7 +64,7 @@
                  *ngIf="localStorage.fileView === 'grid' && fileService.files.length"
                  [ngClass]="{'mt:sm': fileService.directories.length}">
                 <ng-container *ngFor="let file of fileService.files; index as index">
-                    <ng-container *ngIf="index < (page + 1) * 10">
+                    <ng-container *ngIf="index < (content.page + 1) * 10">
                         <m-card type="button" class="x:6 x:2.4@sm theme"
                                 [ngStyle]="{'box-shadow': fileService.selectedFilePaths.has(file.path) ? ('0 0 0 3px var(--' + fileService.selectingColor) + ')' : null }"
                                 style="--card-b-width: 1px; --card-b-color: var(--b-fadest)"
@@ -112,7 +112,7 @@
                     <tbody>
                         <ng-container *ngIf="!fileService.querying">
                             <ng-container *ngFor="let file of fileService.files; index as index">
-                                <ng-container *ngIf="index < (page + 1) * 10">
+                                <ng-container *ngIf="index < (content.page + 1) * 10">
                                     <tr class="touch"
                                         *ngIf="file | fileMetadata | async as metadata"
                                         [ngClass]="{'selected': fileService.selectedFilePaths.has(file.path), 'disabled': !fileService.isAcceptedFile(metadata)}"

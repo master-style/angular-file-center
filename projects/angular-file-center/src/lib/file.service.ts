@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { ChangeDetectorRef, ElementRef, Inject, Injectable, InjectionToken, NgZone } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -159,9 +158,9 @@ export class FileService {
 
     async list(directoryPath?) {
         this.querying = true;
+        this.contentRef?.nativeElement.reset();
         const list = await this.handler.list(directoryPath);
         this.zone.run(() => {
-            this.contentRef?.nativeElement.reset();
             this.directories = list.folders.filter((eachFolder) => !eachFolder.name.startsWith('.'));
             this.files = list.files.filter((eachFile) => eachFile.name !== '.');
             this.querying = false;

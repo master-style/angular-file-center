@@ -24,7 +24,6 @@ export class FileComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('modal') modalRef: ElementRef<any>;
     @ViewChild('content') contentRef: ElementRef<any>;
 
-    page = 0;
     localStorage = localStorage;
     subscriptions = [];
 
