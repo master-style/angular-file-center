@@ -94,9 +94,11 @@ export class FileService {
         private sanitizer: DomSanitizer,
         private zone: NgZone
     ) {
-        this.options = merge(DEFAULT_OPTIONS, options);
+        this.defaultOptions = merge(DEFAULT_OPTIONS, options);
+        this.options = cloneDeep(this.defaultOptions);
     }
 
+    defaultOptions: FileOptions;
     changeDetectorRef: ChangeDetectorRef;
     handler: Handler;
     route: ActivatedRoute;
@@ -153,7 +155,7 @@ export class FileService {
         this.target = target;
         this.targetKey = targetKey;
         this.mode = 'select';
-        this.options = merge(this.options, options);
+        this.options = merge(this.defaultOptions, options);
     }
 
     async list(directoryPath?) {
